@@ -52,7 +52,7 @@ export default {
           login: {
             url: 'accounts/token/',
             method: 'post',
-            propertyName: 'access',
+            propertyName: 'access'
           },
           user: {
             url: 'accounts/me/',

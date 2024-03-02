@@ -48,12 +48,13 @@
           <v-layout column justify-center align-center>
             <v-btn
               width="90%"
-              type="submit"
+              type="button"
               :disabled="!valid || loading"
               large
               color="#DC4E56"
               depressed
               class="text-none text-h6 pa-5 primary--text mb-4 rounded-xl"
+              @click="login()"
             >
               Sign In
             </v-btn>
@@ -74,13 +75,15 @@
 </template>
 
 <script>
+import { signInAPI } from '../../apis/accountApi'
+
 export default {
   name: 'Login',
   data () {
     return {
       valid: false,
       form: {
-        email: undefined,
+        username: undefined,
         password: undefined
       },
       loading: false,
@@ -89,8 +92,8 @@ export default {
   },
   methods: {
     async login () {
-      const res = await this.$axios.post('auth/login', this.form)
-      console.log(res)
+      const res = await signInAPI(this.form)
+      console.log(res, "res")
     }
   }
 }
