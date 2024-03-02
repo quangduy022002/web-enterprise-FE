@@ -11,7 +11,7 @@
       <v-card-text>
         <v-form v-model="valid" @submit.prevent="login()">
           <v-text-field
-            v-model="form.email"
+            v-model="form.username"
             class="rounded-xl"
             color="black"
             background-color="primary"
@@ -48,13 +48,12 @@
           <v-layout column justify-center align-center>
             <v-btn
               width="90%"
-              type="button"
+              type="submit"
               :disabled="!valid || loading"
               large
               color="#DC4E56"
               depressed
               class="text-none text-h6 pa-5 primary--text mb-4 rounded-xl"
-              @click="login()"
             >
               Sign In
             </v-btn>
@@ -93,7 +92,7 @@ export default {
   methods: {
     async login () {
       const res = await signInAPI(this.form)
-      console.log(res, "res")
+      console.log(res, 'res')
     }
   }
 }
