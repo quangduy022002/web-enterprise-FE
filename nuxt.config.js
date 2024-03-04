@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const baseURL = 'http://localhost:8080/'
+
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -34,7 +36,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
   axios: {
-    baseURL: 'localhost:8080/',
+    baseURL: 'http://localhost:8080/',
     proxy: true,
     headers: {
       accept: 'application/json',
@@ -44,13 +46,20 @@ export default {
       // Add other common headers if needed
     }
   },
-
+  proxy: {
+    '/api/': {
+      target: `${baseURL}`,
+      pathRewrite: {
+        '^/api/': '/'
+      }
+    }
+  },
   auth: {
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: 'auth/login',
+            url: 'auth/login/',
             method: 'post',
             propertyName: 'data.token'
           },

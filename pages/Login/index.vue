@@ -89,8 +89,8 @@ export default {
   },
   methods: {
     async login () {
-      const res = await this.$axios.post('auth/login', this.form)
-      console.log(res)
+      const res = await this.$axios.post('api/auth/login', this.form)
+      await this.$auth.setToken('local', 'Bearer ' + res.data.token)
     }
   }
 }
