@@ -11,7 +11,7 @@
       <v-card-text>
         <v-form v-model="valid" @submit.prevent="login()">
           <v-text-field
-            v-model="form.email"
+            v-model="form.username"
             class="rounded-xl"
             color="black"
             background-color="primary"
@@ -80,7 +80,7 @@ export default {
     return {
       valid: false,
       form: {
-        email: undefined,
+        username: undefined,
         password: undefined
       },
       loading: false,

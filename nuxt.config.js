@@ -50,9 +50,9 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: 'accounts/token/',
+            url: 'auth/login',
             method: 'post',
-            propertyName: 'access',
+            propertyName: 'data.token'
           },
           user: {
             url: 'accounts/me/',
