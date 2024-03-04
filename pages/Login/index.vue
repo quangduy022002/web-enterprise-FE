@@ -9,7 +9,7 @@
       </v-layout>
 
       <v-card-text>
-        <v-form v-model="valid" @submit.prevent="login()">
+        <v-form v-model="valid" @submit="login()">
           <v-text-field
             v-model="form.username"
             class="rounded-xl"
@@ -63,6 +63,7 @@
               color="#1E437B"
               depressed
               class="text-none text-h6 pa-5 primary--text rounded-xl"
+              to="/login/create-account"
             >
               Create Account
             </v-btn>
