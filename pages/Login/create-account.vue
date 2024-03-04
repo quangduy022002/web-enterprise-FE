@@ -135,6 +135,7 @@ export default {
       try {
         const res = await this.$axios.post('api/auth/create-account', this.form)
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
+        await this.$auth.setUser(res.data)
       } catch (err) {
 
       }

@@ -1,7 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
 
-const baseURL = 'http://localhost:8080/'
-
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -30,29 +28,17 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/rules'
+    '~/plugins/rules',
+    '~plugins/axios'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
   axios: {
     baseURL: 'http://localhost:8080/',
-    proxy: true,
-    headers: {
-      accept: 'application/json',
-      common: {
-        'Content-Type': 'application/json'
-      }
-      // Add other common headers if needed
-    }
-  },
-  proxy: {
-    '/api/': {
-      target: `${baseURL}`,
-      pathRewrite: {
-        '^/api/': '/'
-      }
-    }
+    debug: false,
+    proxyHeaders: false,
+    credentials: false
   },
   auth: {
     strategies: {
@@ -63,11 +49,7 @@ export default {
             method: 'post',
             propertyName: 'data.token'
           },
-          user: {
-            url: 'accounts/me/',
-            method: 'get',
-            propertyName: 'users'
-          },
+          user: false,
           tokenRequired: true,
           logout: false
         }
@@ -75,10 +57,10 @@ export default {
       watchLoggedIn: true,
       redirect: {
         login: '/login',
-        logout: '/',
-        callback: '/login',
-        home: '/'
-      }
+        logout: '/login',
+        home: false
+      },
+      fullPathRedirect: true
     }
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
