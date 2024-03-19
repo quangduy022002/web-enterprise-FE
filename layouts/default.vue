@@ -142,9 +142,6 @@ export default {
         this.snackbarTime = this.messages.at(-1).created.getTime()
       }
     }
-  },
-  mounted () {
-    console.log(this.$auth)
   }
 }
 </script>

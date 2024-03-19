@@ -9,58 +9,66 @@
       </v-layout>
 
       <v-card-text>
-        <v-form v-model="valid" @submit="signUp()">
-          <v-row no-gutters>
+        <v-form v-model="valid" @submit.prevent="signUp()">
+          <v-layout>
             <v-text-field
               v-model="form.firstName"
               class="rounded-xl mr-4"
               color="black"
-              background-color="primary"
+
               prepend-inner-icon="mdi-account"
-              solo
-              placeholder="First Name"
+              outlined
+              label="First Name"
               :rules="[$rules.required]"
             />
             <v-text-field
               v-model="form.lastName"
-              class="rounded-xl ml-4"
+              class="rounded-xl"
               color="black"
-              background-color="primary"
+
               prepend-inner-icon="mdi-account"
-              solo
-              placeholder="Last Name"
+              outlined
+              label="Last Name"
               :rules="[$rules.required]"
             />
-          </v-row>
+          </v-layout>
 
           <v-text-field
             v-model="form.email"
             class="rounded-xl"
             color="black"
-            background-color="primary"
-            prepend-inner-icon="mdi-account"
-            solo
-            placeholder="Email"
+            prepend-inner-icon="mdi-email"
+            outlined
+            label="Email"
             :rules="[$rules.required, $rules.email]"
           />
           <v-text-field
             v-model="form.username"
             class="rounded-xl"
             color="black"
-            background-color="primary"
+
             prepend-inner-icon="mdi-account"
-            solo
-            placeholder="Username"
+            outlined
+            label="Username"
             :rules="[$rules.required]"
+          />
+          <v-select
+            :items="items"
+            outlined
+            class="rounded-xl"
+            color="black"
+            :rules="[$rules.required]"
+
+            label="Faculty"
           />
           <v-text-field
             v-model="form.password"
             class="rounded-xl"
             color="black"
-            background-color="primary"
+
             prepend-inner-icon="mdi-lock"
-            solo
-            placeholder="Password"
+            outlined
+            label="Password"
             :rules="[$rules.required]"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"
@@ -70,21 +78,15 @@
             v-model="form.retypedPassword"
             class="rounded-xl"
             color="black"
-            background-color="primary"
+
             prepend-inner-icon="mdi-lock"
-            solo
-            placeholder="Confirm Password"
+            outlined
+            label="Confirm Password"
             :rules="[$rules.required, rulesRetypePassword]"
             :append-icon="showRetypedPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showRetypedPassword ? 'text' : 'password'"
             @click:append="showRetypedPassword = !showRetypedPassword"
           />
-          <v-layout align-center class="mb-6 accent--text">
-            Already have account?
-            <v-btn to="/Login" plain class="ma-0 pa-0 accent--text">
-              Login
-            </v-btn>
-          </v-layout>
           <v-layout column justify-center align-center>
             <v-btn
               width="90%"
@@ -93,10 +95,16 @@
               type="submit"
               color="#1E437B"
               depressed
-              class="text-none text-h6 pa-5 primary--text rounded-xl"
+              class="text-none text-h6 pa-5 primary--text rounded-xl mb-2"
             >
               Create Account
             </v-btn>
+            <p class="black--text">
+              Already have account?
+              <a to="/Login">
+                Login
+              </a>
+            </p>
           </v-layout>
         </v-form>
       </v-card-text>
@@ -120,7 +128,8 @@ export default {
       },
       loading: false,
       showPassword: false,
-      showRetypedPassword: false
+      showRetypedPassword: false,
+      items: ['IT', 'Business', 'Design']
     }
   },
   computed: {
@@ -146,6 +155,6 @@ export default {
   <style scoped>
     .v-card {
       border-color: black;
-      box-shadow: 10px 10px #1E437B !important;
+      box-shadow: 10px 10px black !important;
     }
   </style>

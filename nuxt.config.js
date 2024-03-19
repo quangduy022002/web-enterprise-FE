@@ -35,7 +35,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
   axios: {
-    baseURL: 'http://localhost:8080/',
+    baseURL: 'http://localhost:8080',
     debug: false,
     proxyHeaders: false,
     credentials: false
@@ -45,7 +45,7 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: 'auth/login/',
+            url: '/auth/login/',
             method: 'post',
             propertyName: 'data.token'
           },
@@ -86,10 +86,10 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: '#E4DDB9',
+          primary: '#004D85',
           accent: '#426FE2',
-          secondary: '#E4DDB9',
-          info: colors.teal.lighten1,
+          secondary: '#FFFFFF',
+          info: '#000000',
           warning: colors.amber.base,
           error: '#E14444',
           success: colors.green.accent3

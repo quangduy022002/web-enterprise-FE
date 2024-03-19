@@ -1,9 +1,9 @@
 <template>
   <v-layout fill-height align-center justify-center>
-    <v-card outlined width="40%" class="d-block justify-center align-center rounded-xl pa-8" elevation="8" shaped>
+    <v-card outlined width="30%" class="d-block justify-center align-center rounded-xl pa-8" elevation="8" shaped>
       <v-layout column justify-center align-center class="">
         <v-img src="/logo.png" width="132" height="119" class="mb-4" />
-        <h1 class="text-center">
+        <h1 class="text-center primary--text">
           Sign In
         </h1>
       </v-layout>
@@ -14,20 +14,18 @@
             v-model="form.username"
             class="rounded-xl"
             color="black"
-            background-color="primary"
             prepend-inner-icon="mdi-account"
-            solo
-            placeholder="Username"
+            outlined
+            label="Username"
             :rules="[$rules.required]"
           />
           <v-text-field
             v-model="form.password"
             class="rounded-xl"
             color="black"
-            background-color="primary"
             prepend-inner-icon="mdi-lock"
-            solo
-            placeholder="Password"
+            outlined
+            label="Password"
             :rules="[$rules.required]"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             :type="showPassword ? 'text' : 'password'"
@@ -36,7 +34,7 @@
           <v-layout justify-space-between align-center class="mb-6 accent--text">
             <v-checkbox hide-details label="Remember me" class="ma-0" color="accent" on-icon="mdi-checkbox-intermediate">
               <template #label>
-                <div class="accent--text">
+                <div class="info--text">
                   Remember me
                 </div>
               </template>
@@ -51,22 +49,18 @@
               type="submit"
               :disabled="!valid || loading"
               large
-              color="#DC4E56"
+              color="primary"
               depressed
-              class="text-none text-h6 pa-5 primary--text mb-4 rounded-xl"
+              class="text-none text-h6 pa-5 white--text mb-4 rounded-xl"
             >
               Sign In
             </v-btn>
-            <v-btn
-              width="90%"
-              large
-              color="#1E437B"
-              depressed
-              class="text-none text-h6 pa-5 primary--text rounded-xl"
-              to="/login/create-account"
-            >
-              Create Account
-            </v-btn>
+            <p>
+              Don't have an Account?
+              <a href="/login/create-account">
+                Register
+              </a>
+            </p>
           </v-layout>
         </v-form>
       </v-card-text>
@@ -90,9 +84,13 @@ export default {
   },
   methods: {
     async login () {
-      const res = await this.$axios.post('auth/login', this.form)
-      await this.$auth.setToken('local', 'Bearer ' + res.data.token)
-      await this.$auth.setUser(res.data)
+      try {
+        const res = await this.$axios.post('auth/login', this.form)
+        await this.$auth.setToken('local', 'Bearer ' + res.data.token)
+        await this.$auth.setUser(res.data)
+      } catch (err) {
+
+      }
     }
   }
 }
@@ -100,6 +98,6 @@ export default {
 <style scoped>
   .v-card {
     border-color: black;
-    box-shadow: 10px 10px #1E437B !important;
+    box-shadow: 10px 10px black !important;
   }
 </style>

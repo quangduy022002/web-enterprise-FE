@@ -59,8 +59,7 @@ export default {
     return {
       valid: false,
       form: {
-        email: undefined,
-        password: undefined
+        email: undefined
       },
       loading: false,
       showPassword: false,
@@ -71,6 +70,16 @@ export default {
       rules: {
         required: value => !!value || 'Required.',
         min: v => (v && v.length >= 8) || 'Min 8 characters'
+      }
+    }
+  },
+  methods: {
+    async sendCode () {
+      try {
+        const res = await this.$axios.post('auth/send-code', this.form)
+        console.log(res)
+      } catch (err) {
+
       }
     }
   }
