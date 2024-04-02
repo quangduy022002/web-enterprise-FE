@@ -65,7 +65,6 @@
             v-model="form.password"
             class="rounded-xl"
             color="black"
-
             prepend-inner-icon="mdi-lock"
             outlined
             label="Password"
@@ -93,17 +92,19 @@
               large
               :disabled="!valid || loading"
               type="submit"
-              color="#1E437B"
+              color="primary"
               depressed
-              class="text-none text-h6 pa-5 primary--text rounded-xl mb-2"
+              class="text-none text-h6 pa-5 rounded-xl mb-2"
             >
               Create Account
             </v-btn>
             <p class="black--text">
               Already have account?
-              <a to="/Login">
-                Login
-              </a>
+              <nuxt-link to="/login">
+                <a>
+                  Login
+                </a>
+              </nuxt-link>
             </p>
           </v-layout>
         </v-form>
@@ -142,7 +143,7 @@ export default {
   methods: {
     async signUp () {
       try {
-        const res = await this.$axios.post('api/auth/create-account', this.form)
+        const res = await this.$axios.post('auth/create-account', this.form)
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
         await this.$auth.setUser(res.data)
       } catch (err) {
