@@ -7,11 +7,9 @@
     shaped
   >
     <v-layout column justify-center align-center class="mb-4">
-      <v-card outlined rounded="pill" class="card-icon">
-        <v-icon size="136" color="error">
-          mdi-hand-clap
-        </v-icon>
-      </v-card>
+      <v-icon size="136">
+        mdi-hand-clap
+      </v-icon>
       <h1 class="text-center primary--text">
         Congratulation
       </h1>
@@ -25,7 +23,6 @@
         <v-btn
           width="90%"
           type="submit"
-          :disabled="!valid"
           large
           color="primary"
           depressed
@@ -33,9 +30,7 @@
           @click="$router.push('/login')"
         >
           Log in
-          <v-icon
-            right
-          >
+          <v-icon right>
             mdi-arrow-right
           </v-icon>
         </v-btn>
@@ -50,13 +45,9 @@ export default {
   name: 'Success'
 }
 </script>
-    <style scoped>
-      .main-card {
-        border-color: black;
-        box-shadow: 10px 10px #1E437B !important;
-      }
-      .card-icon{
-        border-width: medium;
-        border-color: #E4DDB9;
-      }
-    </style>
+<style scoped>
+.main-card {
+  border-color: black;
+  box-shadow: 10px 10px #1E437B !important;
+}
+</style>

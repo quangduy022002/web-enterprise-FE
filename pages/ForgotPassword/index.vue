@@ -47,9 +47,7 @@
               class="text-none text-h6 pa-5 mb-4 rounded-xl"
             >
               Continue
-              <v-icon
-                right
-              >
+              <v-icon right>
                 mdi-arrow-right
               </v-icon>
             </v-btn>
@@ -99,20 +97,21 @@ export default {
       } catch (err) {
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'error',
-          message: 'Wrong Code'
+          message: err?.response?.data?.message
         }))
       }
     }
   }
 }
 </script>
-  <style scoped>
-    .main-card {
-      border-color: black;
-      box-shadow: 10px 10px #1E437B !important;
-    }
-    .card-icon{
-      border-width: medium;
-      border-color: #E4DDB9;
-    }
-  </style>
+<style scoped>
+.main-card {
+  border-color: black;
+  box-shadow: 10px 10px #1E437B !important;
+}
+
+.card-icon {
+  border-width: medium;
+  border-color: #E4DDB9;
+}
+</style>

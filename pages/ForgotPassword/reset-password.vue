@@ -1,7 +1,7 @@
 <template>
   <v-layout fill-height align-center justify-center>
     <v-card
-        v-if="!success"
+      v-if="!success"
       outlined
       width="40%"
       class="d-block justify-center align-center rounded-xl pa-8 main-card"
@@ -77,7 +77,7 @@
         </v-form>
       </v-card-text>
     </v-card>
-    <Success v-if="success"/>
+    <Success v-if="success" />
   </v-layout>
 </template>
 

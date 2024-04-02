@@ -69,6 +69,8 @@
 </template>
 
 <script>
+import { Alert } from '~/store/alerts'
+
 export default {
   name: 'Login',
   data () {
@@ -89,7 +91,10 @@ export default {
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
         await this.$auth.setUser(res.data)
       } catch (err) {
-
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: err?.response?.data?.message
+        }))
       }
     }
   }
