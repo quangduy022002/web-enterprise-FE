@@ -69,9 +69,8 @@ export default {
     },
     async submit () {
       try {
-        console.log(this.form.files)
         const data = new FormData()
-        data.append('files', this.form.files)
+        data.append('files', this.form.files[0])
         data.append('name', this.form.name)
         data.append('description', this.form.description)
         await this.$axios.post('/submission/create', data, {
@@ -79,7 +78,7 @@ export default {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
           }
         })
-        // this.$router.push('/account')
+        this.$router.push('/account')
       } catch (err) {
         console.err(err)
       }

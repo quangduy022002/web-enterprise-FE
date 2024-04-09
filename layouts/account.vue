@@ -85,6 +85,11 @@ export default {
         this.snackbar = true
         this.snackbarTime = this.messages.at(-1).created.getTime()
       }
+    },
+    '$auth.loggedIn' () {
+      if (!this.$auth.loggedIn) {
+        this.$router.push('/login')
+      }
     }
   }
 }

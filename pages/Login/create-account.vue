@@ -53,6 +53,7 @@
             :rules="[$rules.required]"
           />
           <v-select
+            v-model="form.faculty"
             :items="items"
             outlined
             class="rounded-xl"
@@ -127,7 +128,8 @@ export default {
         retypedPassword: undefined,
         firstName: undefined,
         lastName: undefined,
-        email: undefined
+        email: undefined,
+        faculty: undefined
       },
       loading: false,
       showPassword: false,
