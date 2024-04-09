@@ -49,7 +49,11 @@ export default {
             method: 'post',
             propertyName: 'data.token'
           },
-          user: false,
+          user: {
+            url: '/account/detail/information',
+            method: 'get',
+            propertyName: false
+          },
           tokenRequired: true,
           logout: false
         }

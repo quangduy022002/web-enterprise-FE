@@ -89,7 +89,7 @@ export default {
       try {
         const res = await this.$axios.post('auth/login', this.form)
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
-        await this.$auth.setUser(res.data)
+        await this.$auth.setUser(res.data.user)
       } catch (err) {
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'error',
