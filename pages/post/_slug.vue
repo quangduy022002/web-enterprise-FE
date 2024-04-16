@@ -41,6 +41,7 @@
         </a>
       </v-layout>
       <v-card-text v-html="post.description" />
+      <div v-if="viewMode !== 'view'">
       <div class="text-h2">
         Comments
       </div>
@@ -65,7 +66,7 @@
         </v-layout>
       </v-form>
       <v-divider v-if="post.comments.length" />
-      <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center>
+      <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center >
         <v-btn icon class="mr-2">
           <v-img src="/avatar.png" width="40" height="40" />
         </v-btn>
@@ -76,6 +77,7 @@
           <div>{{ comment.content }}</div>
         </v-layout>
       </v-layout>
+    </div>
     </v-card>
   </v-container>
 </template>

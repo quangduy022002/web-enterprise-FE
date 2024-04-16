@@ -37,7 +37,7 @@
             :key="index"
             :to="item.to"
           >
-            <v-list-item-title>
+            <v-list-item-title v-if="item.valid">
               <v-icon class="mr-2">
                 {{ item.icon }}
               </v-icon>{{ item.title }}
@@ -75,7 +75,7 @@
       </div>
       <v-row class="px-4">
         <v-col v-for="post in newPosts" :key="post.id" cols="3">
-          <v-card @click="toPost(post.id)" height="296px">
+          <v-card height="296px" @click="toPost(post.id)">
             <v-layout justify-center align-center>
               <v-img contain :src="post.files[0] ??'/image.png'" height="164" width="164" />
             </v-layout>
@@ -93,7 +93,11 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-layout justify-center class="mt-4"><v-btn @click="loadMore = !loadMore">{{loadMore ? 'Show less' : 'Load More'}}</v-btn></v-layout>
+      <v-layout justify-center class="mt-4">
+        <v-btn @click="loadMore = !loadMore">
+          {{ loadMore ? 'Show less' : 'Load More' }}
+        </v-btn>
+      </v-layout>
     </v-sheet>
   </v-card>
 </template>
@@ -104,12 +108,14 @@ export default {
       items: [{
         title: 'My Account',
         to: '/account',
-        icon: 'mdi-account'
+        icon: 'mdi-account',
+        valid: this.$auth.user.roles.name !== 5
       },
       {
         title: 'Logout',
         to: '/logout',
-        icon: 'mdi-logout'
+        icon: 'mdi-logout',
+        valid: true
       }
       ],
       posts: [],
