@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <html-vue ref="htmlVue">
+      <post slot="pdf-content" :post="item" />
+    </html-vue>
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
@@ -13,7 +16,7 @@
           outlined
           hide-details
         />
-        <v-btn to="/add-post" color="primary" x-large class="ml-2">
+        <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2">
           Add a post
         </v-btn>
       </v-card-title>
@@ -30,6 +33,24 @@
           >
             {{ item.status.name }}
           </v-chip>
+        </template>
+        <template #item.actions="{ item }">
+          <v-layout>
+          <v-icon
+            v-if="item.status.name !== 'Approved' && $auth.user.roles.name === 4"
+            class="mr-2"
+            @click.stop="editItem(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
+            class="mr-2"
+            @click.stop="deleteItem(item)"
+          >
+            mdi-delete
+          </v-icon>
+          </v-layout>
         </template>
       </v-data-table>
     </v-card>
@@ -50,9 +71,11 @@ export default {
         { text: 'Post Id', value: 'id' },
         { text: 'Email', value: 'author.email' },
         { text: 'Detail Post', value: 'name' },
-        { text: 'Post status', value: 'status.name' }
+        { text: 'Post status', value: 'status.name' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ],
-      data: []
+      data: [],
+      item: undefined
     }
   },
   async mounted () {
@@ -70,9 +93,19 @@ export default {
     getColor (status) {
       if (status === 'Not approved') {
         return 'grey'
-      } else {
+      } else if (status === 'Approved') {
         return 'success'
+      } else {
+        return 'error'
       }
+    },
+    editItem (item) {
+      this.$router.push({ path: '/add-post', query: { id: item.id } })
+    },
+    async deleteItem (item) {
+      await this.$axios.delete(`/submission/remove/${item.id}`)
+      const index = this.data.indexOf(item)
+      this.data.splice(index, 1)
     },
     handleClick (value) {
       this.$router.push(`/post/${value.id}`)

@@ -63,8 +63,7 @@ export default {
         login: '/login',
         logout: '/login',
         home: false
-      },
-      fullPathRedirect: true
+      }
     }
   },
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

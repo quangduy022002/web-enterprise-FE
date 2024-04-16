@@ -73,10 +73,7 @@ export default {
 }
 </script>
 <style>
-.ck-editor__main {
-    height: 100% ;
-}
-.ck-rounded-corners{
-    height: 90% !important;
+.ck-editor__editable {
+  max-height: 400px;
 }
 </style>

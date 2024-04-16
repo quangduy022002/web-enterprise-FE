@@ -2,20 +2,19 @@
   <v-layout fill-height align-center justify-center>
     <v-card
       outlined
-      width="90%"
       class="d-block justify-center align-center rounded-xl pa-8 main-card"
       elevation="8"
       shaped
-      height="90%"
+      width="90%"
     >
-      <v-row style="height: 85% !important;" class="mb-4 mt-2">
+      <v-row class="mb-4 mt-2">
         <v-col cols="6">
           <v-text-field v-model="form.name" outlined label="Title" />
           <ckeditor v-model="form.description" />
         </v-col>
         <v-col cols="6">
           <my-dnd
-            height="100%"
+            height="80%"
             rounded="lg"
             accept="image/*"
             mode="hide"
@@ -27,6 +26,7 @@
               contain
               :src="mediaUrlGuide"
               class="rounded-lg pa-1"
+              max-height="260"
               content-class="d-flex justify-center align-center"
             >
               <div v-if="!mediaUrlGuide" class="text-center d-flex flex-column text-primary">
@@ -37,13 +37,23 @@
               </div>
             </v-img>
           </my-dnd>
+          <v-file-input
+            v-model="filesPdf"
+            chips
+            multiple
+            accept="application/pdf"
+            truncate-length="30"
+          />
         </v-col>
       </v-row>
-      <v-row class="justify-end ma-0">
+      <v-layout class="justify-end ma-0">
+        <v-btn x-large class="mr-4" @click="$router.go(-1)">
+          Cancel
+        </v-btn>
         <v-btn x-large color="primary" @click="submit()">
           Submit
         </v-btn>
-      </v-row>
+      </v-layout>
     </v-card>
   </v-layout>
 </template>
@@ -56,31 +66,71 @@ export default {
       form: {
         name: '',
         description: '',
-        files: ''
+        files: []
       },
-      files: '',
-      mediaUrlGuide: undefined
+      mediaUrlGuide: undefined,
+      filesPdf: []
+    }
+  },
+  async created () {
+    if (this.$route.query.id) {
+      const res = await this.$axios.get(`/submission/detail/${this.$route.query.id}`)
+      this.form.name = res.data.name
+      this.form.description = res.data.description
+      this.form.files = res.data.files
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+      const pdfExtension = '.pdf'
+      res.data.files.forEach((file) => {
+        if (file.toLowerCase().includes(pdfExtension)) {
+          this.filesPdf.push(file)
+        }
+        imageExtensions.forEach((extension) => {
+          if (file.toLowerCase().includes(extension)) {
+            this.mediaUrlGuide = file
+          }
+        })
+      })
+      this.filesPdf = this.filesPdf.map(async (file) => {
+        const response = await this.$axios.get(file)
+        const blob = await response.blob()
+        const fileName = file.substring(file.lastIndexOf('/') + 1)
+        const fileObject = new File([blob], fileName)
+        return fileObject
+      })
     }
   },
   methods: {
     uploadMedia (thumbnail) {
       this.mediaUrlGuide = URL.createObjectURL(thumbnail[0])
-      this.form.files = thumbnail
+      this.form.files.push(thumbnail[0])
     },
     async submit () {
       try {
+        this.form.files = [...this.form.files, ...this.filesPdf]
         const data = new FormData()
-        data.append('files', this.form.files[0])
+        this.form.files.forEach((file) => {
+
+          data.append('files', file)
+        })
         data.append('name', this.form.name)
         data.append('description', this.form.description)
-        await this.$axios.post('/submission/create', data, {
-          headers: {
-            'Content-Type': `multipart/form-data; boundary=${data._boundary}`
-          }
-        })
+        if (this.$route.query.id) {
+          await this.$axios.patch(`/submission/update/${this.$route.query.id}`, data, {
+            headers: {
+              'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+            }
+          })
+        } else {
+          await this.$axios.post('/submission/create', data, {
+            headers: {
+              'Content-Type': `multipart/form-data; boundary=${data._boundary}`
+            }
+          })
+        }
+
         this.$router.push('/account')
       } catch (err) {
-        console.err(err)
+        console.error(err)
       }
     }
   }
