@@ -10,17 +10,17 @@
 
       <v-card-text>
         <v-form v-model="valid" @submit.prevent="signUp()">
-            <v-text-field
-              v-model="$auth.user.username"
-              class="rounded-xl"
-              color="black"
+          <v-text-field
+            v-model="$auth.user.username"
+            class="rounded-xl"
+            color="black"
 
-              prepend-inner-icon="mdi-account"
-              outlined
-              label="Username"
-              :rules="[$rules.required]"
-              disabled
-            />
+            prepend-inner-icon="mdi-account"
+            outlined
+            label="Username"
+            :rules="[$rules.required]"
+            disabled
+          />
           <v-layout>
             <v-text-field
               v-model="form.firstName"

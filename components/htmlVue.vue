@@ -1,12 +1,12 @@
 <template>
   <div>
     <vue-html2pdf
+      ref="html2Pdf"
       :show-layout="false"
       :float-layout="true"
       :enable-download="true"
       :preview-modal="true"
       :paginate-elements-by-height="1400"
-      ref="html2Pdf"
       filename="hee hee"
       :pdf-quality="2"
       :manual-pagination="false"
@@ -14,8 +14,7 @@
       pdf-orientation="landscape"
       pdf-content-width="800px"
     >
-      <section slot="pdf-content">
-      </section>
+      <section slot="pdf-content" />
     </vue-html2pdf>
   </div>
 </template>

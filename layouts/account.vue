@@ -19,7 +19,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <navbar-account/>
+    <navbar-account />
     <v-main>
       <Nuxt />
     </v-main>
@@ -79,17 +79,17 @@ export default {
   computed: {
     ...mapFields('alerts', ['messages'])
   },
-  mounted(){
-    if (!this.$auth.loggedIn) {
-        this.$router.push('/login')
-      }
-  },
   watch: {
     messages () {
       if (this.messages.length > 0 && this.messages.at(-1).created.getTime() > this.snackbarTime) {
         this.snackbar = true
         this.snackbarTime = this.messages.at(-1).created.getTime()
       }
+    }
+  },
+  mounted () {
+    if (!this.$auth.loggedIn) {
+      this.$router.push('/login')
     }
   }
 }

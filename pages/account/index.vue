@@ -36,20 +36,20 @@
         </template>
         <template #item.actions="{ item }">
           <v-layout>
-          <v-icon
-            v-if="item.status.name !== 'Approved' && $auth.user.roles.name === 4"
-            class="mr-2"
-            @click.stop="editItem(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
-            class="mr-2"
-            @click.stop="deleteItem(item)"
-          >
-            mdi-delete
-          </v-icon>
+            <v-icon
+              v-if="item.status.name !== 'Approved' && $auth.user.roles.name === 4"
+              class="mr-2"
+              @click.stop="editItem(item)"
+            >
+              mdi-pencil
+            </v-icon>
+            <v-icon
+              v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
+              class="mr-2"
+              @click.stop="deleteItem(item)"
+            >
+              mdi-delete
+            </v-icon>
           </v-layout>
         </template>
       </v-data-table>

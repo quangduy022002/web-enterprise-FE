@@ -109,7 +109,6 @@ export default {
         this.form.files = [...this.form.files, ...this.filesPdf]
         const data = new FormData()
         this.form.files.forEach((file) => {
-
           data.append('files', file)
         })
         data.append('name', this.form.name)

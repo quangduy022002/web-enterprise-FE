@@ -1,25 +1,25 @@
 <template>
-    <div>
-        <div class="text-h1">
-        {{ `Hello ${$auth.user.firstName}` }}
-        </div>
-        <v-card width="100%">
-        <v-card-title>
-            <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            />
-        </v-card-title>
-        <v-data-table
-            :headers="headers"
-            :items="desserts"
-            :search="search"
-        />
-        </v-card>
+  <div>
+    <div class="text-h1">
+      {{ `Hello ${$auth.user.firstName}` }}
     </div>
+    <v-card width="100%">
+      <v-card-title>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        />
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        :search="search"
+      />
+    </v-card>
+  </div>
 </template>
 <script>
 export default {
