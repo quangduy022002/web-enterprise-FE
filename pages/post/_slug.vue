@@ -42,42 +42,79 @@
       </v-layout>
       <v-card-text v-html="post.description" />
       <div v-if="viewMode !== 'view'">
-      <div class="text-h2">
-        Comments
-      </div>
-      <v-divider />
-      <v-form @submit.prevent="addComment()">
-        <v-layout class="my-2" align-center>
+        <div class="text-h2">
+          Comments
+        </div>
+        <v-divider />
+        <v-form @submit.prevent="addComment()">
+          <v-layout class="my-2" align-center>
+            <v-btn icon class="mr-2">
+              <v-img src="/avatar.png" width="40" height="40" />
+            </v-btn>
+
+            <v-text-field
+              v-model="form.content"
+              outlined
+              rounded
+              dense
+              hide-details
+              placeholder="Write your comment here"
+            />
+            <v-btn icon class="mr-2" type="submit">
+              <v-icon>mdi-send</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-form>
+        <v-divider v-if="post.comments.length" />
+        <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center>
           <v-btn icon class="mr-2">
             <v-img src="/avatar.png" width="40" height="40" />
           </v-btn>
+          <v-layout column>
+            <div class="font-weight-bold">
+              {{ comment.author.firstName + " " + comment.author.lastName }}
+            </div>
+            <div>{{ comment.content }}</div>
+          </v-layout>
+        </v-layout>
+      </div>
+      <div v-else>
+        <div class="text-h2">
+          Feedback
+        </div>
+        <v-divider />
+        <v-form @submit.prevent="addFeedback()">
+          <v-layout class="my-2" align-center>
+            <v-btn icon class="mr-2">
+              <v-img src="/avatar.png" width="40" height="40" />
+            </v-btn>
 
-          <v-text-field
-            v-model="form.content"
-            outlined
-            rounded
-            dense
-            hide-details
-            placeholder="Write your comment here"
-          />
-          <v-btn icon class="mr-2" type="submit">
-            <v-icon>mdi-send</v-icon>
+            <v-text-field
+              v-model="form.content"
+              outlined
+              rounded
+              dense
+              hide-details
+              placeholder="Write your comment here"
+            />
+            <v-btn icon class="mr-2" type="submit">
+              <v-icon>mdi-send</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-form>
+        <v-divider v-if="post.feedbacks.length" />
+        <v-layout v-for="feedback in post.feedbacks" :key="feedback.id" class="my-2" align-center>
+          <v-btn icon class="mr-2">
+            <v-img src="/avatar.png" width="40" height="40" />
           </v-btn>
+          <v-layout column>
+            <div class="font-weight-bold">
+              {{ feedback.author.firstName + " " + feedback.author.lastName }}
+            </div>
+            <div>{{ feedback.content }}</div>
+          </v-layout>
         </v-layout>
-      </v-form>
-      <v-divider v-if="post.comments.length" />
-      <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center >
-        <v-btn icon class="mr-2">
-          <v-img src="/avatar.png" width="40" height="40" />
-        </v-btn>
-        <v-layout column>
-          <div class="font-weight-bold">
-            {{ comment.author.firstName + " " + comment.author.lastName }}
-          </div>
-          <div>{{ comment.content }}</div>
-        </v-layout>
-      </v-layout>
-    </div>
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -134,6 +171,10 @@ export default {
     async addComment () {
       const res = await this.$axios.post('/comment/create', this.form)
       this.post.comments.push(res.data)
+    },
+    async addFeedback () {
+      const res = await this.$axios.post('/feedback/create', this.form)
+      this.post.feedback.push(res.data)
     },
     formatDate (value) {
       const dateString = value
