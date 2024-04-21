@@ -53,6 +53,7 @@
             :rules="[$rules.required]"
           />
           <v-select
+            v-model="form.faculty"
             :items="items"
             outlined
             class="rounded-xl"
@@ -127,7 +128,8 @@ export default {
         retypedPassword: undefined,
         firstName: undefined,
         lastName: undefined,
-        email: undefined
+        email: undefined,
+        faculty: undefined
       },
       loading: false,
       showPassword: false,
@@ -148,6 +150,7 @@ export default {
         const res = await this.$axios.post('auth/create-account', this.form)
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
         await this.$auth.setUser(res.data)
+        this.$router.push('/')
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',
