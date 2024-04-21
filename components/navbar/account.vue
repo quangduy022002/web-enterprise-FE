@@ -75,6 +75,15 @@ export default {
   }),
   computed: {
   },
+  created () {
+    if (this.$auth.user.roles.name === 1) {
+      this.items.splice(2, 0, {
+        icon: 'mdi-account',
+        title: 'User',
+        to: '/account/user'
+      })
+    }
+  },
   methods: {
     createProject () {
 

@@ -36,7 +36,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
   axios: {
-    baseURL: 'http://localhost:8080',
+    baseURL: 'http://103.77.172.5:8080',
     debug: false,
     proxyHeaders: false,
     credentials: false,

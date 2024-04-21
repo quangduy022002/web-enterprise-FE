@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <template>
   <v-container>
     <v-layout justify-space-between class="mb-2">
@@ -78,6 +79,43 @@
           </v-layout>
         </v-layout>
       </div>
+      <div v-else>
+        <div class="text-h2">
+          Feedback
+        </div>
+        <v-divider />
+        <v-form @submit.prevent="addFeedback()">
+          <v-layout class="my-2" align-center>
+            <v-btn icon class="mr-2">
+              <v-img src="/avatar.png" width="40" height="40" />
+            </v-btn>
+
+            <v-text-field
+              v-model="form.content"
+              outlined
+              rounded
+              dense
+              hide-details
+              placeholder="Write your comment here"
+            />
+            <v-btn icon class="mr-2" type="submit">
+              <v-icon>mdi-send</v-icon>
+            </v-btn>
+          </v-layout>
+        </v-form>
+        <v-divider v-if="post.feedbacks.length" />
+        <v-layout v-for="feedback in post.feedbacks" :key="feedback.id" class="my-2" align-center>
+          <v-btn icon class="mr-2">
+            <v-img src="/avatar.png" width="40" height="40" />
+          </v-btn>
+          <v-layout column>
+            <div class="font-weight-bold">
+              {{ feedback.author.firstName + " " + feedback.author.lastName }}
+            </div>
+            <div>{{ feedback.content }}</div>
+          </v-layout>
+        </v-layout>
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -134,6 +172,10 @@ export default {
     async addComment () {
       const res = await this.$axios.post('/comment/create', this.form)
       this.post.comments.push(res.data)
+    },
+    async addFeedback () {
+      const res = await this.$axios.post('/feedback/create', this.form)
+      this.post.feedback.push(res.data)
     },
     formatDate (value) {
       const dateString = value
