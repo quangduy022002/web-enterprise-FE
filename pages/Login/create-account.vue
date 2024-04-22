@@ -56,6 +56,8 @@
             v-model="form.faculty"
             :items="items"
             outlined
+            item-text="name"
+            item-value="name"
             class="rounded-xl"
             color="black"
             :rules="[$rules.required]"
@@ -128,14 +130,18 @@ export default {
         retypedPassword: undefined,
         firstName: undefined,
         lastName: undefined,
-        email: undefined,
+        email: '',
         faculty: undefined
       },
       loading: false,
       showPassword: false,
       showRetypedPassword: false,
-      items: ['IT', 'Business', 'Design']
+      items: undefined
     }
+  },
+  async created(){
+    const res = await this.$axios.get('/faculty/get-all', this.form)
+    this.items = res.data
   },
   computed: {
     rulesRetypePassword () {
