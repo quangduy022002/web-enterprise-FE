@@ -1,22 +1,23 @@
 <template>
   <v-navigation-drawer
-  :mini-variant="mini"
-  fixed
-  height="100%"
-  touchless
-  app
-  permanent
-  hide-overlay
-  :width="$vuetify.breakpoint.smAndDown ? '100%' : ''"
-  color="primary"
+    :mini-variant="mini"
+    fixed
+    height="100%"
+    touchless
+    app
+    permanent
+    hide-overlay
+    :width="$vuetify.breakpoint.smAndDown ? '100%' : ''"
+    color="primary"
   >
     <v-layout column fill-height>
-      
       <div class="text-h2 ml-4 mt-4 white--text d-flex" @click.stop="mini = !mini">
         <v-icon class="mr-4" color="white">
           mdi-text
         </v-icon>
-        <div v-if="!mini">Dashboard</div>
+        <div v-if="!mini">
+          Dashboard
+        </div>
       </div>
       <v-list>
         <v-list-item v-for="item in items" :key="item.title" :to="item.to">

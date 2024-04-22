@@ -48,13 +48,13 @@ export default {
     }
   },
   computed: {
-    chartData(){
-      let totalLikes = 0;
-      let totalFeedBack = 0;
-      let totalComment = 0;
-      this.posts.forEach(post => {
+    chartData () {
+      const totalLikes = 0
+      const totalFeedBack = 0
+      const totalComment = 0
+      this.posts.forEach((post) => {
         console.log(post)
-      });
+      })
       return {
         labels: [
           'Like',

@@ -94,7 +94,7 @@
         </v-col>
       </v-row>
       <v-layout justify-center class="mt-4">
-        <v-btn v-if='newPosts.length > 4' @click="loadMore = !loadMore">
+        <v-btn v-if="newPosts.length > 4" @click="loadMore = !loadMore">
           {{ loadMore ? 'Show less' : 'Load More' }}
         </v-btn>
       </v-layout>

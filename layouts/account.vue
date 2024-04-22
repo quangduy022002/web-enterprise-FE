@@ -22,8 +22,8 @@
     <navbar-account />
     <v-main>
       <v-container fluid fill-height>
-      <Nuxt />
-    </v-container>
+        <Nuxt />
+      </v-container>
     </v-main>
   <!-- <v-navigation-drawer
       v-model="rightDrawer"

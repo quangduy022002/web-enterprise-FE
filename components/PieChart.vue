@@ -29,11 +29,11 @@ export default {
       }
     }
   },
-  computed:{
-    chartData(){
-      const denied = this.posts.filter(post => post.status.name === 'Denied' )
+  computed: {
+    chartData () {
+      const denied = this.posts.filter(post => post.status.name === 'Denied')
       const notApproved = this.posts.filter(post => post.status.name === 'Not approved')
-      const approved = this.posts.filter(post => post.status.name === 'Approved' )
+      const approved = this.posts.filter(post => post.status.name === 'Approved')
       return {
         labels: [
           'Denied',
@@ -53,8 +53,8 @@ export default {
       }
     }
   },
-  mounted(){
-    
+  mounted () {
+
   }
 }
 </script>

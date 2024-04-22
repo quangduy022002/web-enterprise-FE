@@ -2,7 +2,12 @@
   <v-container>
     <v-card flat class="d-block justify-center align-center rounded-xl pa-8">
       <v-layout column justify-center align-center class="">
-        <v-file-input id="inputFile" v-model="fileImage" style="visibility: hidden;" />
+        <input
+          ref="inputFile"
+          type="file"
+          hidden
+          @change="handleFileInputChange"
+        >
         <v-badge
           avatar
           bordered
@@ -10,7 +15,7 @@
           icon="mdi-camera"
         >
           <v-avatar size="132">
-            <v-img :src="avatar" @click="editImage" />
+            <v-img :src="avatarImage ? avatarImage : '/avatar.png'" @click="editImage" />
           </v-avatar>
         </v-badge>
 
@@ -112,23 +117,14 @@ export default {
         lastName: undefined,
         dob: undefined,
         phone: undefined,
-        address: undefined,
-        avatar: undefined
+        address: undefined
       },
       fileImage: undefined,
+      avatarImage: undefined,
       loading: false,
       showPassword: false,
       showRetypedPassword: false,
       items: ['IT', 'Business', 'Design']
-    }
-  },
-  computed: {
-    avatar () {
-      if (this.fileImage) {
-        return URL.createObjectURL(this.fileImage)
-      } else {
-        return this.form.avatar || '/avatar.png'
-      }
     }
   },
   created () {
@@ -136,22 +132,30 @@ export default {
       this.form[key] = this.$auth.user[key]
     })
   },
+  mounted () {
+    this.avatarImage = this.$auth.user.avatar
+  },
   methods: {
     editImage () {
-      document.getElementById('inputFile').click()
+      this.$refs.inputFile.click()
     },
     async editProfile () {
       if (this.fileImage) {
         const data = new FormData()
-        data.append('files', this.fileImage)
-        const res = await this.$axios.post('/medias/upload', data, {
-          headers: {
-            'Content-Type': `multipart/form-data; boundary=${data._boundary}`
-          }
+        data.append('image', this.fileImage)
+        Object.keys(this.form).map((key) => {
+          data.append(key, this.form[key])
         })
-        this.form.avatar = res.data[0]
+
+        await this.$axios.patch(`/account/update-info/${this.$auth.user.id}`, data)
       }
-      await this.$axios.patch(`/account/update-info/${this.$auth.user.id}`, this.form)
+    },
+    handleFileInputChange (event) {
+      const files = event.target.files[0]
+      const objectURL = URL.createObjectURL(files)
+
+      this.fileImage = files
+      this.avatarImage = objectURL
     }
   }
 }
