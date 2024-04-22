@@ -6,8 +6,9 @@
           mdi-arrow-left-circle
         </v-icon>
       </v-btn>
+      <v-spacer></v-spacer>
       <v-layout>
-        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" @click="approve()">
+        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-4" @click="approve()">
           Deny
         </v-btn>
         <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" @click="approve()">

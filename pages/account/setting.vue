@@ -62,6 +62,15 @@
             label="Phone Number"
             :rules="[$rules.phone]"
           />
+          <v-text-field
+            v-model="form.address"
+            class="rounded-xl"
+            color="black"
+
+            prepend-inner-icon="mdi-account"
+            outlined
+            label="Address"
+          />
           <v-menu
             bottom
           >
@@ -72,6 +81,7 @@
                 color="black"
                 prepend-inner-icon="mdi-account"
                 outlined
+                readonly
                 label="Date of birth"
                 v-bind="attrs"
                 v-on="on"

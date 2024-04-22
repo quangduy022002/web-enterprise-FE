@@ -4,6 +4,12 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
+    <v-row>
+      <v-col>
+        <pie-chart></pie-chart>
+      </v-col>
+    </v-row>
+    
     <v-card>
       <v-card-title>
         <v-select
