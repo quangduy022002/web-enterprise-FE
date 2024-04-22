@@ -40,7 +40,7 @@ export default {
     debug: false,
     proxyHeaders: false,
     credentials: false,
-    proxy: true
+    // proxy: true
   },
   ...getProxies(),
   auth: {
