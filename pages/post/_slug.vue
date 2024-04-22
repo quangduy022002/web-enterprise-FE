@@ -6,7 +6,7 @@
           mdi-arrow-left-circle
         </v-icon>
       </v-btn>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-layout>
         <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-4" @click="approve()">
           Deny
@@ -143,9 +143,9 @@ export default {
       this.post.files.forEach((file) => {
         acceptedExtensions.forEach((extension) => {
           if (file.toLowerCase().includes(extension)) {
-              this.filesPdf.push(file);
+            this.filesPdf.push(file)
           }
-        });
+        })
         imageExtensions.forEach((extension) => {
           if (file.toLowerCase().includes(extension)) {
             this.image = file
@@ -176,7 +176,7 @@ export default {
     },
     async addFeedback () {
       const res = await this.$axios.post('/feedback/create', this.form)
-      this.post.feedback.push(res.data)
+      this.post.feedbacks.push(res.data)
     },
     formatDate (value) {
       const dateString = value

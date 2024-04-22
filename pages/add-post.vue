@@ -41,7 +41,7 @@
             v-model="filesPdf"
             chips
             multiple
-            accept="application/pdf"
+            accept=".pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             truncate-length="30"
           />
         </v-col>

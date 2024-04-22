@@ -3,42 +3,58 @@
     id="my-chart-id"
     :chart-options="chartOptions"
     :chart-data="chartData"
+    style="height: 350px; width: 350px;"
   />
 </template>
 
 <script>
 import { Pie } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-import { ArcElement } from 'chart.js'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
 export default {
   name: 'PieChart',
   components: { Pie },
-  data() {
+  props: {
+    posts: {
+      type: Array,
+      default: () => []
+    }
+  },
+  data () {
     return {
-      chartData: {
-        labels: [
-    'Red',
-    'Blue',
-    'Yellow'
-  ],
-  datasets: [{
-    label: 'My First Dataset',
-    data: [300, 50, 100],
-    backgroundColor: [
-      'rgb(255, 99, 132)',
-      'rgb(54, 162, 235)',
-      'rgb(255, 205, 86)'
-    ],
-    hoverOffset: 4
-  }]
-      },
       chartOptions: {
         responsive: true
       }
     }
+  },
+  computed:{
+    chartData(){
+      const denied = this.posts.filter(post => post.status.name === 'Denied' )
+      const notApproved = this.posts.filter(post => post.status.name === 'Not approved')
+      const approved = this.posts.filter(post => post.status.name === 'Approved' )
+      return {
+        labels: [
+          'Denied',
+          'Not Approved',
+          'Approved'
+        ],
+        datasets: [{
+          label: 'My First Dataset',
+          data: [denied.length, notApproved.length, approved.length],
+          backgroundColor: [
+            '#E14444',
+            '#FFC107',
+            '#00E676'
+          ],
+          hoverOffset: 4
+        }]
+      }
+    }
+  },
+  mounted(){
+    
   }
 }
 </script>

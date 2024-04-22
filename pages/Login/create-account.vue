@@ -139,16 +139,16 @@ export default {
       items: undefined
     }
   },
-  async created(){
-    const res = await this.$axios.get('/faculty/get-all', this.form)
-    this.items = res.data
-  },
   computed: {
     rulesRetypePassword () {
       return (value) => {
         return value === this.form.password || 'Password not the same'
       }
     }
+  },
+  async created () {
+    const res = await this.$axios.get('/faculty/get-all', this.form)
+    this.items = res.data
   },
   methods: {
     async signUp () {

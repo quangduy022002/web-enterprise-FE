@@ -4,12 +4,15 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
-    <v-row>
+    <v-row justify="center" align="center">
       <v-col>
-        <pie-chart></pie-chart>
+        <pie-chart :posts="data" />
+      </v-col>
+      <v-col>
+        <line-chart-component :posts="data" />
       </v-col>
     </v-row>
-    
+
     <v-card>
       <v-card-title>
         <v-select

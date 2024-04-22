@@ -74,8 +74,8 @@
         New Posts
       </div>
       <v-row class="px-4">
-        <v-col v-for="post in newPosts" :key="post.id" cols="3">
-          <v-card height="296px" @click="toPost(post.id)">
+        <v-col v-for="post in newPosts" :key="post.id" :cols="$vuetify.breakpoint.smAndDown ? 12 : 3">
+          <v-card height="296px" width="" @click="toPost(post.id)">
             <v-layout justify-center align-center>
               <v-img contain :src="post.files[0] ??'/image.png'" height="164" width="164" />
             </v-layout>
@@ -94,7 +94,7 @@
         </v-col>
       </v-row>
       <v-layout justify-center class="mt-4">
-        <v-btn @click="loadMore = !loadMore">
+        <v-btn v-if='newPosts.length > 4' @click="loadMore = !loadMore">
           {{ loadMore ? 'Show less' : 'Load More' }}
         </v-btn>
       </v-layout>
