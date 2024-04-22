@@ -142,6 +142,11 @@ export default {
         this.snackbarTime = this.messages.at(-1).created.getTime()
       }
     }
+  },
+  mounted () {
+    if (!this.$auth.loggedIn && !this.$route.path.includes('/login')) {
+      this.$router.push('/login')
+    }
   }
 }
 </script>
