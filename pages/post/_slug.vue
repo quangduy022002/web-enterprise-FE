@@ -139,12 +139,13 @@ export default {
       const res = await this.$axios.get(`/submission/detail/${this.$route.params.slug}`)
       this.post = res.data
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
-      const pdfExtension = '.pdf'
-
+      const acceptedExtensions = ['.pdf', '.doc', '.docx']
       this.post.files.forEach((file) => {
-        if (file.toLowerCase().includes(pdfExtension)) {
-          this.filesPdf.push(file)
-        }
+        acceptedExtensions.forEach((extension) => {
+          if (file.toLowerCase().includes(extension)) {
+              this.filesPdf.push(file);
+          }
+        });
         imageExtensions.forEach((extension) => {
           if (file.toLowerCase().includes(extension)) {
             this.image = file
