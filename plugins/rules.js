@@ -10,7 +10,10 @@ export default ({ app }, inject) => {
       return !value || EMAIL_REGEX.test(value) || PHONE_REGEX.test(value) || app.i18n.t('app.rules.emailOrPhone')
     },
     email: (value) => {
-      return !value || EMAIL_REGEX.test(value) || 'Invalid Email'
+      if (!value) return true;
+      if (!EMAIL_REGEX.test(value)) return 'Invalid Email';
+      if (!value.endsWith('@fpt.edu.vn')) return 'Email must belong to @fpt.edu.vn domain';
+      return true;
     },
     phone: (value) => {
       return !value || PHONE_REGEX.test(value) || 'Invalid Phone'
