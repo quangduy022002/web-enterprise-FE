@@ -1,5 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-import { getProxies } from './utils/getProxies'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -39,10 +38,8 @@ export default {
     baseURL: 'http://localhost:8080',
     debug: false,
     proxyHeaders: false,
-    credentials: false,
-    // proxy: true
+    credentials: false
   },
-  ...getProxies(),
   auth: {
     strategies: {
       local: {
@@ -78,8 +75,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth',
-    '@nuxtjs/proxy'
+    '@nuxtjs/auth'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
