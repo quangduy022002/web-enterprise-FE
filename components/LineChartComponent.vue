@@ -1,5 +1,5 @@
 <template>
-  <LineChartGenerator
+  <Bar
     :chart-options="chartOptions"
     :chart-data="chartData"
     style="height: 350px; width: 350px;"
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { Line as LineChartGenerator } from 'vue-chartjs/legacy'
+import { Bar } from 'vue-chartjs/legacy'
 import {
   Chart as ChartJS,
   Title,
@@ -33,7 +33,7 @@ ChartJS.register(
 
 export default {
   name: 'LineChartComponent',
-  components: { LineChartGenerator },
+  components: { Bar },
   props: {
     posts: {
       type: Array,
@@ -43,7 +43,11 @@ export default {
   data () {
     return {
       chartOptions: {
-        responsive: true
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
       }
     }
   },
@@ -53,7 +57,9 @@ export default {
       let totalFeedBack = 0;
       let totalComment = 0;
       this.posts.forEach(post => {
-        console.log(post)
+        totalLikes += post.likes.length
+        totalFeedBack += post.feedbacks.length
+        totalComment += post.comments.length
       });
       return {
         labels: [
@@ -62,8 +68,7 @@ export default {
           'Comment'
         ],
         datasets: [{
-          label: 'My First Dataset',
-          data: [300, 50, 100],
+          data: [totalLikes, totalFeedBack, totalComment],
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
