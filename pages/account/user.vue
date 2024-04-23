@@ -5,10 +5,10 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
-    <div class="text-h2 mb-4">
+    <div v-if="this.$auth.user.roles.id === 1" class="text-h2 mb-4">
       Analysis
     </div>
-    <line-user :faculty="faculty" :users="data" />
+    <line-user :faculty="faculty" :users="data" v-if="this.$auth.user.roles.id === 1" />
     <div class="text-h2 my-5">
       User
     </div>
@@ -72,7 +72,7 @@ export default {
     if (this.$auth.user.roles.name !== 3) {
       this.data = res.data
     } else {
-      this.data = [...res.data].filter(user => user.faculty.name === this.$auth.user.faculty.name && user.roles.name === 4)
+      this.data = res.data.filter(user => user?.faculty?.id === this.$auth.user.faculty.id && user.roles.id === 4)
     }
   },
   methods: {
