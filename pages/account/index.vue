@@ -140,6 +140,15 @@
                   </v-icon>{{ !item.publish ? 'Publish Post' : 'Unpublish Post' }}
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item @click="downloadItem(item)">
+                <v-list-item-title>
+                  <v-icon
+                    class="mr-2"
+                  >
+                    mdi-download
+                  </v-icon>Download
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         </template>
@@ -149,6 +158,8 @@
 </template>
 <script>
 import { Alert } from '~/store/alerts'
+import JSZip from 'jszip'
+import '~/plugins/filesave.js'
 export default {
   layout: 'account',
   data () {
@@ -188,6 +199,39 @@ export default {
     })
   },
   methods: {
+    downloadItem(item){
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+      const acceptedExtensions = ['.pdf', '.doc', '.docx']
+      const filesPdf = []
+      let image = ''
+      item.files.forEach((file) => {
+        acceptedExtensions.forEach((extension) => {
+          if (file.toLowerCase().includes(extension)) {
+            filesPdf.push(file)
+          }
+        })
+        imageExtensions.forEach((extension) => {
+          if (file.toLowerCase().includes(extension)) {
+            image = file
+          }
+        })
+      })
+      let zip = new JSZip();
+        let img = zip.folder("images")
+        img.file("img.png", image)
+        let pdf = zip.folder("pdf")
+        if(filesPdf.length){
+          filesPdf.forEach(file => {
+            const fileNameWithParams = file.split('?')[0]
+            pdf.file(fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1),file)
+          })
+        }
+        zip.generateAsync({
+          type: "blob"
+        }).then(function(content) {
+          saveAs(content, `${item.id}.zip`)
+        })
+    },
     getPeriod (closureDate, finalClosureDate) {
       const result = closureDate.substring(0, 7) + ' -> ' + finalClosureDate.substring(0, 7)
       return result // Output: 2024-04 -> 2025-12
