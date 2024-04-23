@@ -147,6 +147,7 @@ export default {
         if (this.fileImage) {
           data.append('image', this.fileImage)
         }
+        // eslint-disable-next-line array-callback-return
         Object.keys(this.form).map((key) => {
           data.append(key, this.form[key])
         })

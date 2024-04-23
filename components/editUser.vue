@@ -45,6 +45,7 @@
           :rules="[$rules.required]"
         />
         <v-select
+          v-if="$auth.user.roles.name !== 3"
           v-model="form.faculty"
           :items="items"
           outlined
@@ -55,6 +56,7 @@
           label="Faculty"
         />
         <v-select
+          v-if="$auth.user.roles.name !== 3"
           v-model="form.roles"
           :items="roles"
           item-value="value"
@@ -152,7 +154,12 @@ export default {
   methods: {
     async signUp () {
       try {
-        const res = await this.$axios.post('api/account/createClient', this.form)
+        let res = {}
+        if (this.$auth.user.roles.name !== 3) {
+          res = await this.$axios.post('api/account/createClient', this.form)
+        } else {
+          res = await this.$axios.post('api/account/createStudent', this.form)
+        }
         this.dialog = false
         this.$emit('updateUser', res)
         this.$store.commit('alerts/add', new Alert(this, {

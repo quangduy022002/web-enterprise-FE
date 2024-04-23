@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container>
     <add-period v-model="dialog" />
@@ -15,7 +16,7 @@
         <LineChartComponent :posts="data" :periods="periods" />
       </v-col>
     </v-row>
-    <div class="text-h2 mb-4">
+    <div class="text-h2 my-5">
       Post
     </div>
     <v-card>
@@ -47,7 +48,7 @@
           outlined
           hide-details
         />
-        <v-btn v-if="$auth.user.roles.name === 1" color="primary" x-large class="ml-2" @click="addPeriod">
+        <v-btn v-if="$auth.user.roles.name === 1" color="primary" x-large class="ml-2 text-none" @click="addPeriod">
           Add Period
         </v-btn>
         <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2 text-none">
@@ -147,6 +148,7 @@
   </v-container>
 </template>
 <script>
+import { Alert } from '~/store/alerts'
 export default {
   layout: 'account',
   data () {
@@ -214,12 +216,24 @@ export default {
 
       const index = this.data.indexOf(item)
       this.data.splice(index, 1)
+
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
     },
     async publishItem (item) {
       await this.$axios.patch(`api/submission/publish/${item.id}`, {
         publish: !item.publish
       })
       item.publish = !item.publish
+
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
     },
     handleClick (value) {
       this.$router.push(`/post/${value.id}`)

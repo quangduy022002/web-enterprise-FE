@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container>
     <edit-user v-model="dialog" />
@@ -8,7 +9,7 @@
       Analysis
     </div>
     <line-user :faculty="faculty" :users="data" />
-    <div class="text-h2 mb-4">
+    <div class="text-h2 my-5">
       User
     </div>
     <v-card>
@@ -21,7 +22,7 @@
           outlined
           hide-details
         />
-        <v-btn v-if="$auth.user.roles.name === 1 || $auth.user.roles.name === 3 " color="primary" x-large class="ml-2" @click="addUser()">
+        <v-btn v-if="$auth.user.roles.name === 1 || $auth.user.roles.name === 3 " color="primary" x-large class="ml-2 text-none" @click="addUser()">
           Add user
         </v-btn>
       </v-card-title>
@@ -43,7 +44,7 @@
   </v-container>
 </template>
 <script>
-
+import { Alert } from '~/store/alerts'
 export default {
   layout: 'account',
   data () {
@@ -68,7 +69,11 @@ export default {
     const res = await this.$axios.get('api/account/get-all')
     const resFac = await this.$axios.get('api/faculty/get-all')
     this.faculty = resFac.data
-    this.data = res.data
+    if (this.$auth.user.roles.name !== 3) {
+      this.data = res.data
+    } else {
+      this.data = [...res.data].filter(user => user.faculty.name === this.$auth.user.faculty.name && user.roles.name === 4)
+    }
   },
   methods: {
     addUser () {
@@ -78,6 +83,11 @@ export default {
       await this.$axios.delete(`api/account/delete/${item.id}`)
       const index = this.data.indexOf(item)
       this.data.splice(index, 1)
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
     }
   }
 }

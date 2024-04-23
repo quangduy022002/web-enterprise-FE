@@ -80,8 +80,8 @@
         <v-divider v-if="post.comments.length" />
         <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center>
           <div class="mr-2">
-              <v-img :src="comment.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
-            </div>
+            <v-img :src="comment.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+          </div>
           <v-layout column>
             <div class="font-weight-bold">
               {{ comment.author.firstName + " " + comment.author.lastName }}
@@ -169,8 +169,8 @@
         <v-divider v-if="post.feedbacks.length" />
         <v-layout v-for="feedback in post.feedbacks" :key="feedback.id" class="my-2" align-center>
           <div class="mr-2">
-              <v-img :src="feedback.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
-            </div>
+            <v-img :src="feedback.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+          </div>
           <v-layout column>
             <div class="font-weight-bold">
               {{ feedback.author.firstName + " " + feedback.author.lastName }}

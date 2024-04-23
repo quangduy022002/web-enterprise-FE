@@ -128,15 +128,16 @@
                 <!-- <v-img height="250" class="rounded-lg" src="https://source.unsplash.com/random/100x100/?5"  /> -->
                 <v-img :src="getImageLink(post)" height="250" class="rounded-lg" />
                 <h2 class="my-2 text-subtitle-1 font-weight-bold">
-                 {{ post.name }}
+                  {{ post.name }}
                 </h2>
-                <p class="text-subtitle-2 mt-n1" style="height: 54px;" v-html="truncateDescription(post.description)">
-                </p>
+                <p class="text-subtitle-2 mt-n1" style="height: 54px;" v-html="truncateDescription(post.description)" />
               </div>
-                  <div class="d-flex justify-end">
-                    <v-icon color="red">mdi-heart</v-icon>
-                    <span class="ml-1">{{ post.likes.length }}</span>
-                  </div>
+              <div class="d-flex justify-end">
+                <v-icon color="red">
+                  mdi-heart
+                </v-icon>
+                <span class="ml-1">{{ post.likes.length }}</span>
+              </div>
             </v-card-text>
           </v-card>
         </v-col>
@@ -171,7 +172,7 @@ export default {
       loadMore: false,
       faculties: [],
       faculty: undefined,
-      model: 0,
+      model: 0
     }
   },
   async fetch () {
@@ -222,8 +223,8 @@ export default {
     })
   },
   methods: {
-    truncateDescription(description) {
-      return description.length >= 60 ? description.substring(0, 60) + "..." : description;
+    truncateDescription (description) {
+      return description.length >= 60 ? description.substring(0, 60) + '...' : description
     },
     getImageLink (post) {
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']

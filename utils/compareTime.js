@@ -1,6 +1,6 @@
-import moment from 'moment';
-export function compareTime(dateString) {
-	const date = moment(dateString);
+import moment from 'moment'
+export function compareTime (dateString) {
+  const date = moment(dateString)
 
-	return date.fromNow();
+  return date.fromNow()
 }
