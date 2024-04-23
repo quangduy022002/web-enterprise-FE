@@ -113,7 +113,7 @@ export default {
   methods: {
     async sendCode () {
       try {
-        await this.$axios.post('api/auth/reset-password', this.form)
+        await this.$axios.post('/auth/reset-password', this.form)
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',

@@ -61,7 +61,7 @@ export default {
       editor.plugins.get('FileRepository').createUploadAdapter = async (loader) => {
         const data = new FormData()
         data.append('files', loader)
-        const resUpload = await this.$axios.post('api/medias/upload', data, {
+        const resUpload = await this.$axios.post('/medias/upload', data, {
           headers: {
             'Content-Type': `multipart/form-data; boundary=${data._boundary}`
           }

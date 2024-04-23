@@ -152,7 +152,7 @@ export default {
           data.append(key, this.form[key])
         })
 
-        await this.$axios.patch(`api/account/update-info/${this.$auth.user.id}`, data)
+        await this.$axios.patch(`/account/update-info/${this.$auth.user.id}`, data)
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',

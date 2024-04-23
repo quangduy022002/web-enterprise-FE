@@ -156,9 +156,9 @@ export default {
       try {
         let res = {}
         if (this.$auth.user.roles.name !== 3) {
-          res = await this.$axios.post('api/account/createClient', this.form)
+          res = await this.$axios.post('/account/createClient', this.form)
         } else {
-          res = await this.$axios.post('api/account/createStudent', this.form)
+          res = await this.$axios.post('/account/createStudent', this.form)
         }
         this.dialog = false
         this.$emit('updateUser', res)

@@ -154,13 +154,13 @@ export default {
     }
   },
   async created () {
-    const res = await this.$axios.get('api/faculty/get-all', this.form)
+    const res = await this.$axios.get('/faculty/get-all', this.form)
     this.items = res.data
   },
   methods: {
     async signUp () {
       try {
-        const res = await this.$axios.post('api/auth/create-account', this.form)
+        const res = await this.$axios.post('/auth/create-account', this.form)
         await this.$auth.setToken('local', 'Bearer ' + res.data.token)
         await this.$auth.setUser(res.data)
         await this.$axios.setHeader('Authorization', 'Bearer ' + res.data.token)

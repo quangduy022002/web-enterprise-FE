@@ -40,7 +40,7 @@ export default {
     debug: false,
     proxyHeaders: false,
     credentials: false,
-    proxy: true
+    proxy: false
   },
   proxy: {
     // "/api": "http://103.77.172.5:8080/"

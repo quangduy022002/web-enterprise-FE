@@ -176,9 +176,9 @@ export default {
     }
   },
   async fetch () {
-    const res = await this.$axios.get('api/submission/approved-submissions-list')
+    const res = await this.$axios.get('/submission/approved-submissions-list')
     this.data = res.data
-    const resFac = await this.$axios.get('api/faculty/get-all')
+    const resFac = await this.$axios.get('/faculty/get-all')
     this.faculties = resFac.data
   },
   computed: {

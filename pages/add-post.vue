@@ -97,7 +97,7 @@ export default {
   },
   async created () {
     if (this.$route.query.id) {
-      const res = await this.$axios.get(`api/submission/detail/${this.$route.query.id}`)
+      const res = await this.$axios.get(`/submission/detail/${this.$route.query.id}`)
       this.form.name = res.data.name
       this.form.description = res.data.description
       this.form.files = res.data.files
@@ -142,13 +142,13 @@ export default {
         data.append('name', this.form.name)
         data.append('description', this.form.description)
         if (this.$route.query.id) {
-          await this.$axios.patch(`api/submission/update/${this.$route.query.id}`, data, {
+          await this.$axios.patch(`/submission/update/${this.$route.query.id}`, data, {
             headers: {
               'Content-Type': `multipart/form-data; boundary=${data._boundary}`
             }
           })
         } else {
-          await this.$axios.post('api/submission/create', data, {
+          await this.$axios.post('/submission/create', data, {
             headers: {
               'Content-Type': `multipart/form-data; boundary=${data._boundary}`
             }
