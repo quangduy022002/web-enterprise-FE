@@ -160,7 +160,7 @@ export default {
   },
   async fetch () {
     const res = await this.$axios.get('api/submission/approved-submissions-list')
-    this.posts = res.data
+    this.data = res.data
     const resFac = await this.$axios.get('api/faculty/get-all')
     this.faculties = resFac.data
   },
