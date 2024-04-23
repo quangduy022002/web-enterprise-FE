@@ -28,7 +28,7 @@
           {{ post.name }}
         </v-card-title>
       </v-img>
-      <v-layout justify-end align-end>
+      <v-layout v-if="viewMode === 'view'" justify-end align-end>
         <div class="mr-4"><v-icon>mdi-chat</v-icon>{{`${post.feedbacks.length} Comments`}}</div>
         <div @click="handleLike()"><v-icon :color="this.post.likes.includes(this.$auth.user.id) ? 'red' : ''">mdi-heart</v-icon>{{`${post.likes.length} Likes`}}</div>
       </v-layout>
