@@ -55,9 +55,7 @@
           color="#0C1153"
         />
         <p class="mb-0">
-          Click
-          <a style="color: blue;" @click="handleOpen">here</a>
-          to read
+          I agree to the <a style="color: blue;" @click="handleOpen">Term of service</a> and <a style="color: blue;" @click="handleOpen">Private policy</a>.
         </p>
       </div>
       <v-layout class="justify-end ma-0">

@@ -1,9 +1,16 @@
 <template>
   <v-layout fill-height align-center justify-center>
-    <v-card outlined width="40%" class="d-block justify-center align-center rounded-xl pa-8" elevation="8" shaped>
+    <v-img style="position: absolute; filter: brightness(50%); width: 100%;" height="100%" src="/bg.jpeg" />
+    <v-card
+      style="position: relative; z-index: 100;"
+      outlined
+      width="40%"
+      class="d-block justify-center align-center rounded-xl pa-8"
+      elevation="8"
+      shaped
+    >
       <v-layout column justify-center align-center class="">
-        <v-img src="/logo.png" width="132" height="119" class="mb-4" />
-        <h1 class="text-center">
+        <h1 class="text-center primary--text">
           Sign Up
         </h1>
       </v-layout>
@@ -175,8 +182,5 @@ export default {
 }
 </script>
   <style scoped>
-    .v-card {
-      border-color: black;
-      box-shadow: 10px 10px black !important;
-    }
+
   </style>

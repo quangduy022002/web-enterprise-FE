@@ -14,8 +14,8 @@
             </v-icon>
           </v-btn>
         </div>
-        <v-card-title class="pa-0 text-h5 font-weight-bold">
-          Term Rules
+        <v-card-title class="pa-0 text-h5 font-weight-bold primary--text">
+          Terms and Conditions
         </v-card-title>
         <v-card flat>
           <p class="mb-0 my-3 text-subtitle-1">
