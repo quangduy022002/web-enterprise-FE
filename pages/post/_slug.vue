@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <template>
   <v-container>
     <v-layout justify-space-between class="mb-2">
@@ -29,8 +30,14 @@
         </v-card-title>
       </v-img>
       <v-layout justify-end align-end>
-        <div class="mr-4"><v-icon>mdi-chat</v-icon>{{`${post.feedbacks.length} Comments`}}</div>
-        <div @click="handleLike()"><v-icon :color="this.post.likes.includes(this.$auth.user.id) ? 'red' : ''">mdi-heart</v-icon>{{`${post.likes.length} Likes`}}</div>
+        <div class="mr-4">
+          <v-icon>mdi-chat</v-icon>{{ `${post.feedbacks.length} Comments` }}
+        </div>
+        <div @click="handleLike()">
+          <v-icon :color="post.likes.includes($auth.user.id) ? 'red' : ''">
+            mdi-heart
+          </v-icon>{{ `${post.likes.length} Likes` }}
+        </div>
       </v-layout>
       <v-layout class="text-caption" justify-space-between>
         <div>{{ formatDate(post.createdAt) }}</div>
@@ -286,9 +293,9 @@ export default {
       this.form.content = ""
       this.post.feedbacks.push(res.data)
     },
-    async handleLike(){
+    async handleLike () {
       let res
-      if(this.post.likes.includes(this.$auth.user.id)) {
+      if (this.post.likes.includes(this.$auth.user.id)) {
         res = await this.$axios.patch(`/submission/unlike/${this.post.id}`)
       } else {
         res = await this.$axios.patch(`/submission/like/${this.post.id}`)
