@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import { getProxies } from './utils/getProxies'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -35,22 +36,27 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
   axios: {
-    baseURL: 'http://103.77.172.5:8080/',
+    baseURL: 'http://103.77.172.5:8080',
     debug: false,
     proxyHeaders: false,
-    credentials: false
+    credentials: false,
+    proxy: true
+  },
+  proxy: {
+    // "/api": "http://103.77.172.5:8080/"
+    ...getProxies()
   },
   auth: {
     strategies: {
       local: {
         endpoints: {
           login: {
-            url: '/auth/login/',
+            url: 'api/auth/login/',
             method: 'post',
             propertyName: 'data.token'
           },
           user: {
-            url: '/account/detail/information',
+            url: 'api/account/detail/information',
             method: 'get',
             propertyName: false
           },
@@ -75,7 +81,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    '@nuxtjs/proxy'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

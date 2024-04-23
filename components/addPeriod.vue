@@ -119,7 +119,7 @@ export default {
     async signUp () {
       try {
         this.form.academicYear = this.form.finalClosureDate.slice(0, 4)
-        const res = await this.$axios.post('/period/create', this.form)
+        const res = await this.$axios.post('api/period/create', this.form)
         this.dialog = false
         this.$emit('updatePeriod', res)
         this.$store.commit('alerts/add', new Alert(this, {

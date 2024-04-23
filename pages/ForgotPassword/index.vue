@@ -92,7 +92,7 @@ export default {
   methods: {
     async sendCode () {
       try {
-        await this.$axios.post('auth/send-code', this.form)
+        await this.$axios.post('api/auth/send-code', this.form)
         this.sendEmail = true
       } catch (err) {
         this.$store.commit('alerts/add', new Alert(this, {

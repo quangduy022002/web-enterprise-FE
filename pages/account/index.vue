@@ -164,8 +164,8 @@ export default {
     }
   },
   async mounted () {
-    const res = await this.$axios.get('/submission/submission-list')
-    const resPeriod = await this.$axios.get('/period/list')
+    const res = await this.$axios.get('api/submission/submission-list')
+    const resPeriod = await this.$axios.get('api/period/list')
     this.data = res.data
     this.periods = resPeriod.data
     this.data = this.data.map((value) => {
@@ -194,16 +194,16 @@ export default {
     },
     async deleteItem (item) {
       if (this.$auth.user.roles.name === 4) {
-        await this.$axios.delete(`/submission/remove/${item.id}`)
+        await this.$axios.delete(`api/submission/remove/${item.id}`)
       } else {
-        await this.$axios.delete(`/submission/removeByManager/${item.id}`)
+        await this.$axios.delete(`api/submission/removeByManager/${item.id}`)
       }
 
       const index = this.data.indexOf(item)
       this.data.splice(index, 1)
     },
     async publishItem (item) {
-      await this.$axios.patch(`/submission/publish/${item.id}`, {
+      await this.$axios.patch(`api/submission/publish/${item.id}`, {
         publish: !item.publish
       })
       item.publish = !item.publish
