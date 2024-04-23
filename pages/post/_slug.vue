@@ -79,8 +79,58 @@
             <div class="font-weight-bold">
               {{ comment.author.firstName + " " + comment.author.lastName }}
             </div>
-            <div>{{ comment.content }}</div>
+            <v-layout  v-if="editComment.length && editComment === comment.id">
+            <v-text-field
+              v-model="comment.content"
+              outlined
+              dense
+              hide-details
+              placeholder="Write your comment here"
+            />
+            <v-btn icon class="mr-2" @click="editItem(comment)" >
+              <v-icon>mdi-send</v-icon>
+            </v-btn>
+            </v-layout>
+            <div v-else>{{ comment.content }}</div>
           </v-layout>
+          <v-menu
+            v-if="!editComment.length && comment.author.id === $auth.user.id"
+            bottom
+            :close-on-click="true"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                fab
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list class="d-block">
+              <v-list-item @click="editMode(comment.id)">
+                <v-list-item-title>
+                  <v-icon
+                    class="mr-2"
+                  >
+                    mdi-pencil
+                  </v-icon>Edit
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="deleteItem(comment)">
+                <v-list-item-title>
+                  <v-icon
+
+                    class="mr-2"
+                  >
+                    mdi-delete
+                  </v-icon>Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-layout>
       </div>
       <div v-else>
@@ -116,14 +166,65 @@
             <div class="font-weight-bold">
               {{ feedback.author.firstName + " " + feedback.author.lastName }}
             </div>
-            <div>{{ feedback.content }}</div>
+            <v-layout  v-if="editComment.length && editComment === feedback.id">
+              <v-text-field
+                v-model="feedback.content"
+                outlined
+                dense
+                hide-details
+                placeholder="Write your comment here"
+              />
+              <v-btn icon class="mr-2" @click="editItem(feedback)" >
+                <v-icon>mdi-send</v-icon>
+              </v-btn>
+              </v-layout>
+              <div v-else>{{ feedback.content }}</div>
           </v-layout>
+          <v-menu
+            v-if="!editComment.length && feedback.author.id === $auth.user.id"
+            bottom
+            :close-on-click="true"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                fab
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list class="d-block">
+              <v-list-item @click="editMode(feedback.id)">
+                <v-list-item-title>
+                  <v-icon
+                    class="mr-2"
+                  >
+                    mdi-pencil
+                  </v-icon>Edit
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="deleteItem(feedback)">
+                <v-list-item-title>
+                  <v-icon
+
+                    class="mr-2"
+                  >
+                    mdi-delete
+                  </v-icon>Delete
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </v-layout>
       </div>
     </v-card>
   </v-container>
 </template>
 <script>
+import { Alert } from '~/store/alerts'
 export default {
   data () {
     return {
@@ -134,7 +235,8 @@ export default {
         submissionId: this.$route.params.slug
       },
       image: '',
-      filesPdf: []
+      filesPdf: [],
+      editComment: ''
     }
   },
   async fetch () {
@@ -176,10 +278,12 @@ export default {
     },
     async addComment () {
       const res = await this.$axios.post('/comment/create', this.form)
+      this.form.content = ""
       this.post.comments.push(res.data)
     },
     async addFeedback () {
       const res = await this.$axios.post('/feedback/create', this.form)
+      this.form.content = ""
       this.post.feedbacks.push(res.data)
     },
     async handleLike(){
@@ -201,6 +305,53 @@ export default {
     formatNameFile (file) {
       const fileNameWithParams = file.split('?')[0]
       return fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1)
+    },
+    editMode(id){
+      this.editComment =  id
+    },
+    async editItem(item){
+      try{
+        if(this.viewMode !== 'view'){
+          await this.$axios.patch(`/comment/update/${item.id}`, {content: item.content})
+        } else {
+          await this.$axios.patch(`/feedback/update/${item.id}`, {content: item.content})
+        }
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'success',
+          icon: 'check',
+          message: 'Successful'
+        }))
+      } catch (err) {
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: err?.response?.data?.message
+        }))
+      } finally {
+        this.editComment = ''
+      }
+    },
+    async deleteItem(item){
+      try{
+        if(this.viewMode !== 'view'){
+        await this.$axios.delete(`/comment/remove/${item.id}`)
+        const index = this.post.comments.indexOf(item)
+        this.post.comments.splice(index, 1)
+      } else {
+        await this.$axios.delete(`/feedback/remove/${item.id}`)
+        const index = this.post.feedbacks.indexOf(item)
+        this.post.feedbacks.splice(index, 1)
+      }
+      this.$store.commit('alerts/add', new Alert(this, {
+          type: 'success',
+          icon: 'check',
+          message: 'Successful'
+        }))
+      } catch (err){
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: err?.response?.data?.message
+        }))
+      }
     }
   }
 }

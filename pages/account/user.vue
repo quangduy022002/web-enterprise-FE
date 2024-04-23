@@ -4,6 +4,9 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
+    <div class="text-h2 mb-4">Analysis</div>
+    <line-user :faculty="faculty" :users="data"></line-user>
+    <div class="text-h2 mb-4">User</div>
     <v-card>
       <v-card-title>
         <v-text-field
@@ -53,11 +56,14 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       data: [],
-      item: undefined
+      item: undefined,
+      faculty: undefined
     }
   },
-  async mounted () {
+  async fetch () {
     const res = await this.$axios.get('/account/get-all')
+    const resFac = await this.$axios.get('/faculty/get-all')
+    this.faculty  = resFac.data
     this.data = res.data
   },
   methods: {

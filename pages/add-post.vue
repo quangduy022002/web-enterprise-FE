@@ -8,11 +8,11 @@
       width="90%"
     >
       <v-row class="mb-4 mt-2">
-        <v-col cols="6">
+        <v-col :cols="$vuetify.breakpoint.smAndDown ? 12 : 6">
           <v-text-field v-model="form.name" outlined label="Title" />
           <ckeditor v-model="form.description" />
         </v-col>
-        <v-col cols="6">
+        <v-col :cols="$vuetify.breakpoint.smAndDown ? 12 : 6">
           <my-dnd
             height="80%"
             rounded="lg"
