@@ -4,7 +4,9 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
-    <div class="text-h2 mb-4">Analysis</div>
+    <div class="text-h2 mb-4">
+      Analysis
+    </div>
     <v-row justify="center" align="center">
       <v-col>
         <PieChart :posts="data" />
@@ -13,7 +15,9 @@
         <LineChartComponent :posts="data" :periods="periods" />
       </v-col>
     </v-row>
-    <div class="text-h2 mb-4">Post</div>
+    <div class="text-h2 mb-4">
+      Post
+    </div>
     <v-card>
       <v-card-title>
         <v-select
@@ -37,7 +41,7 @@
         <v-btn v-if="$auth.user.roles.name === 1" color="primary" x-large class="ml-2" @click="addPeriod">
           Add Period
         </v-btn>
-        <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2">
+        <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2 text-none">
           Add a post
         </v-btn>
       </v-card-title>

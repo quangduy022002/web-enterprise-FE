@@ -54,7 +54,7 @@
         </v-layout>
 
         <v-layout v-show="uploadFiles.length && empty" shrink justify-end class="pa-3">
-          <v-btn color="secondary" small :disabled="uploadFiles.length < 1" @click="upload">
+          <v-btn color="secondary" class="text-none" small :disabled="uploadFiles.length < 1" @click="upload">
             <v-icon id="upload-button">
               mdi-upload
             </v-icon>

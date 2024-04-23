@@ -95,7 +95,7 @@
             <v-date-picker v-model="form.dob" />
           </v-menu>
           <v-layout justify-end>
-            <v-btn type="submit" color="primary">
+            <v-btn type="submit" :disabled="loading" color="primary">
               Save
             </v-btn>
           </v-layout>
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { Alert } from '~/store/alerts'
 export default {
   name: 'AccountSetting',
   layout: 'account',
@@ -140,14 +141,28 @@ export default {
       this.$refs.inputFile.click()
     },
     async editProfile () {
-      if (this.fileImage) {
+      this.loading = true
+      try {
         const data = new FormData()
-        data.append('image', this.fileImage)
+        if (this.fileImage) {
+          data.append('image', this.fileImage)
+        }
         Object.keys(this.form).map((key) => {
           data.append(key, this.form[key])
         })
 
         await this.$axios.patch(`/account/update-info/${this.$auth.user.id}`, data)
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'success',
+          icon: 'check',
+          message: 'Successful'
+        }))
+        this.loading = false
+      } catch (error) {
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: error?.response?.data?.message
+        }))
       }
     },
     handleFileInputChange (event) {

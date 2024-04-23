@@ -1,5 +1,6 @@
 <template>
   <v-layout fill-height align-center justify-center>
+    <dialog-term ref="dialogTerm" @click="$refs.dialogTerm.dialog = false" />
     <v-card
       outlined
       class="d-block justify-center align-center rounded-xl pa-8 main-card"
@@ -46,11 +47,32 @@
           />
         </v-col>
       </v-row>
+      <div class="d-flex align-center" style="gap: 2px">
+        <v-checkbox
+          v-model="checkbox"
+          :on-icon="'mdi-checkbox-marked-outline'"
+          :off-icon="'mdi-checkbox-blank-outline'"
+          color="#0C1153"
+        />
+        <p class="mb-0">
+          Click
+          <a style="color: blue;" @click="handleOpen">here</a>
+          to read
+        </p>
+      </div>
       <v-layout class="justify-end ma-0">
-        <v-btn x-large class="mr-4" @click="$router.go(-1)">
+        <v-btn large class="mr-4 text-none py-0" outlined :loading="loading" @click="$router.go(-1)">
           Cancel
         </v-btn>
-        <v-btn x-large color="primary" @click="submit()">
+        <v-btn
+          large
+          color="primary"
+          depressed
+          class="text-none"
+          :disabled="!checkbox"
+          :loading="loading"
+          @click="submit()"
+        >
           Submit
         </v-btn>
       </v-layout>
@@ -59,6 +81,7 @@
 </template>
 
 <script>
+import { Alert } from '~/store/alerts'
 export default {
   name: 'Login',
   data () {
@@ -69,7 +92,9 @@ export default {
         files: []
       },
       mediaUrlGuide: undefined,
-      filesPdf: []
+      filesPdf: [],
+      checkbox: false,
+      loading: false
     }
   },
   async created () {
@@ -104,7 +129,12 @@ export default {
       this.mediaUrlGuide = URL.createObjectURL(thumbnail[0])
       this.form.files.push(thumbnail[0])
     },
+    handleOpen (event) {
+      event.stopPropagation()
+      this.$refs.dialogTerm.dialog = true
+    },
     async submit () {
+      this.loading = true
       try {
         this.form.files = [...this.form.files, ...this.filesPdf]
         const data = new FormData()
@@ -126,10 +156,18 @@ export default {
             }
           })
         }
-
+        this.loading = false
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'success',
+          icon: 'check',
+          message: 'Successful'
+        }))
         this.$router.push('/account')
       } catch (err) {
-        console.error(err)
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: err?.response?.data?.message
+        }))
       }
     }
   }

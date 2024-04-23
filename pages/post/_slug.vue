@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <template>
   <v-container>
     <v-layout justify-space-between class="mb-2">
@@ -286,9 +287,9 @@ export default {
       this.form.content = ""
       this.post.feedbacks.push(res.data)
     },
-    async handleLike(){
+    async handleLike () {
       let res
-      if(this.post.likes.includes(this.$auth.user.id)) {
+      if (this.post.likes.includes(this.$auth.user.id)) {
         res = await this.$axios.patch(`/submission/unlike/${this.post.id}`)
       } else {
         res = await this.$axios.patch(`/submission/like/${this.post.id}`)
