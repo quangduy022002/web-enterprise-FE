@@ -1,21 +1,22 @@
 <!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <template>
   <v-container>
-    <v-layout justify-space-between class="mb-2">
+    <v-layout class="mb-2">
       <v-btn icon fab @click="$router.go(-1)">
         <v-icon large>
           mdi-arrow-left-circle
         </v-icon>
       </v-btn>
       <v-spacer />
-      <v-layout>
-        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-4" @click="deny()">
+        <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
           Deny
         </v-btn>
-        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" @click="approve()">
+        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
           Approve
         </v-btn>
-      </v-layout>
+        <v-btn v-if="post?.status?.name === 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
+          {{ post.publish ? 'Unpublish' : 'Publish'}}
+        </v-btn>
     </v-layout>
     <v-card v-if="!loading" flat>
       <v-img
@@ -282,10 +283,34 @@ export default {
   },
   methods: {
     async deny () {
-      await this.$axios.patch(`api/submission/denied/${this.$route.params.slug}`)
+      const res = await this.$axios.patch(`api/submission/denied/${this.$route.params.slug}`)
+      this.post = res.data
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
     },
     async approve () {
-      await this.$axios.patch(`api/submission/approve/${this.$route.params.slug}`)
+      const res = await this.$axios.patch(`api/submission/approve/${this.$route.params.slug}`)
+      this.post = res.data
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
+    },
+    async publish() {
+      await this.$axios.patch(`api/submission/publish/${this.post.id}`, {
+        publish: !this.post.publish
+      })
+      this.post.publish = !this.post.publish
+
+      this.$store.commit('alerts/add', new Alert(this, {
+        type: 'success',
+        icon: 'check',
+        message: 'Successful'
+      }))
     },
     async addComment () {
       const res = await this.$axios.post('api/comment/create', this.form)
