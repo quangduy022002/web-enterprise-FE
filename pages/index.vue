@@ -43,8 +43,9 @@
             v-for="(item, index) in items"
             :key="index"
             :to="item.to"
+            v-show="item.valid"
           >
-            <v-list-item-title v-if="item.valid">
+            <v-list-item-title>
               <v-icon class="mr-2">
                 {{ item.icon }}
               </v-icon>{{ item.title }}
