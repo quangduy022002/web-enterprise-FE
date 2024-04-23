@@ -1,5 +1,5 @@
 <template>
-  <v-card flat class="overflow-auto fill-height">
+  <v-card flat class="fill-height">
     <v-app-bar
       color="primary"
       elevate-on-scroll
@@ -44,7 +44,7 @@
       </v-menu>
     </v-app-bar>
     <v-sheet>
-     <v-layout v-if="posts.length" class="ma-6" align-center>
+     <v-layout class="ma-6" align-center>
       <div class="text-h2">
         Featured Posts
       </div>
@@ -54,10 +54,14 @@
       :items="faculties"
       item-text="name"
       solo
+      outlined
+      dense
+      flat
       style="max-width:200px;"
       class="white--text"
       hide-details
       placeholder="Faculty"
+      prepend-inner-icon="mdi-filter-outline"
     >
       </v-select>
      </v-layout>
@@ -82,7 +86,7 @@
           </v-layout>
         </v-card>
       </v-layout> -->
-      <v-carousel v-model="model"  cycle
+      <v-carousel v-if="posts.length" v-model="model"  cycle
       hide-delimiter-background
       show-arrows-on-hover>
         <v-carousel-item
@@ -106,10 +110,10 @@
           </v-card>
         </v-carousel-item>
       </v-carousel>
-      <div class="text-h2 ma-6">
+      <div class="text-h2 ma-6" v-if="posts.length">
         New Posts
       </div>
-      <v-row class="px-4">
+      <v-row class="px-4" v-if="posts.length">
         <v-col v-for="post in newPosts" :key="post.id" :cols="$vuetify.breakpoint.smAndDown ? 12 : 3">
           <v-card height="260px" width="" @click="toPost(post.id)">
             <v-layout justify-center align-center>
@@ -126,8 +130,8 @@
           </v-card>
         </v-col>
       </v-row>
-      <v-layout justify-center class="mt-4">
-        <v-btn v-if="newPosts.length >= 4" @click="loadMore = !loadMore">
+      <v-layout justify-center class="my-4">
+        <v-btn color="primary" depressed v-if="newPosts.length >= 4" @click="loadMore = !loadMore">
           {{ loadMore ? 'Show less' : 'Load More' }}
         </v-btn>
       </v-layout>
