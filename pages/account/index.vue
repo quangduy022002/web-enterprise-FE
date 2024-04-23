@@ -10,7 +10,7 @@
         <PieChart :posts="data" />
       </v-col>
       <v-col>
-        <LineChartComponent :posts="data" />
+        <LineChartComponent :posts="data" :periods="periods" />
       </v-col>
     </v-row>
     <div class="text-h2 mb-4">Post</div>
@@ -82,6 +82,7 @@
           </v-icon>
           </v-layout> -->
           <v-menu
+            v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
             bottom
             :close-on-click="true"
           >

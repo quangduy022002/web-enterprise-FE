@@ -1,6 +1,6 @@
 <template>
   <v-layout fill-height align-center justify-center>
-    <v-card outlined width="30%" class="d-block justify-center align-center rounded-xl pa-8" elevation="8" shaped>
+    <v-card outlined :width="$vuetify.breakpoint.smAndDown ? '80%' : '30%'" class="d-block justify-center align-center rounded-xl pa-8" elevation="8" shaped>
       <v-layout column justify-center align-center class="">
         <v-img src="/logo.png" width="132" height="119" class="mb-4" />
         <h1 class="text-center primary--text">

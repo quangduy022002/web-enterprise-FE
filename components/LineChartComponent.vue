@@ -38,6 +38,10 @@ export default {
     posts: {
       type: Array,
       default: () => []
+    },
+    periods: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
@@ -53,7 +57,23 @@ export default {
   },
   computed: {
     chartData(){
-      let totalLikes = 0;
+      let data = []
+      let labels
+      if(this.$auth.user.roles.name !== 4 && this.periods.length){
+        labels = this.getMonthsBetweenDates(new Date(this.periods[0].closureDate),new Date(this.periods[0].finalClosureDate))
+        const postCounts = this.posts.reduce((counts, post) => {
+            const month = new Date(post.createdAt).toLocaleString('en', { month: 'long' });
+            const index = labels.indexOf(month);
+            
+            if (index !== -1) {
+                counts[index]++;
+            }
+
+            return counts;
+        }, new Array(labels.length).fill(0));
+        data = postCounts
+      } else {
+        let totalLikes = 0;
       let totalFeedBack = 0;
       let totalComment = 0;
       this.posts.forEach(post => {
@@ -61,14 +81,16 @@ export default {
         totalFeedBack += post.feedbacks.length
         totalComment += post.comments.length
       });
+      data = [totalLikes, totalFeedBack, totalComment]
+      }
       return {
-        labels: [
+        labels: labels ?? [
           'Like',
           'Feedback',
           'Comment'
         ],
         datasets: [{
-          data: [totalLikes, totalFeedBack, totalComment],
+          data,
           backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
@@ -77,6 +99,18 @@ export default {
           hoverOffset: 4
         }]
       }
+    }
+  },
+  methods: {
+    getMonthsBetweenDates(startDate, endDate) {
+      let months = [];
+      let currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+          months.push(currentDate.toLocaleString('en', { month: 'long' }));
+          currentDate.setMonth(currentDate.getMonth() + 1);
+      }
+      return months;
     }
   }
 }

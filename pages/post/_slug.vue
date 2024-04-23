@@ -32,7 +32,7 @@
         <div class="mr-4"><v-icon>mdi-chat</v-icon>{{`${post.feedbacks.length} Comments`}}</div>
         <div @click="handleLike()"><v-icon :color="this.post.likes.includes(this.$auth.user.id) ? 'red' : ''">mdi-heart</v-icon>{{`${post.likes.length} Likes`}}</div>
       </v-layout>
-      <v-layout class="text-caption px-4" justify-space-between>
+      <v-layout class="text-caption" justify-space-between>
         <div>{{ formatDate(post.createdAt) }}</div>
         <div>{{ `by ${post.author.firstName}` }}</div>
       </v-layout>
