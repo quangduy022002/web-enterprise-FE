@@ -1,4 +1,4 @@
-export const baseUrl = 'http://localhost:8080/'
+export const baseUrl = 'http://103.77.172.5:8080/'
 
 export function getProxies () {
   return {

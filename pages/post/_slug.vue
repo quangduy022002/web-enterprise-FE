@@ -243,7 +243,7 @@ export default {
   async fetch () {
     try {
       this.loading = true
-      const res = await this.$axios.get(`/submission/detail/${this.$route.params.slug}`)
+      const res = await this.$axios.get(`api/submission/detail/${this.$route.params.slug}`)
       this.post = res.data
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
       const acceptedExtensions = ['.pdf', '.doc', '.docx']
@@ -272,27 +272,27 @@ export default {
   },
   methods: {
     async deny () {
-      await this.$axios.patch(`/submission/denied/${this.$route.params.slug}`)
+      await this.$axios.patch(`api/submission/denied/${this.$route.params.slug}`)
     },
     async approve () {
-      await this.$axios.patch(`/submission/approve/${this.$route.params.slug}`)
+      await this.$axios.patch(`api/submission/approve/${this.$route.params.slug}`)
     },
     async addComment () {
-      const res = await this.$axios.post('/comment/create', this.form)
+      const res = await this.$axios.post('api/comment/create', this.form)
       this.form.content = ""
       this.post.comments.push(res.data)
     },
     async addFeedback () {
-      const res = await this.$axios.post('/feedback/create', this.form)
+      const res = await this.$axios.post('api/feedback/create', this.form)
       this.form.content = ""
       this.post.feedbacks.push(res.data)
     },
     async handleLike () {
       let res
       if (this.post.likes.includes(this.$auth.user.id)) {
-        res = await this.$axios.patch(`/submission/unlike/${this.post.id}`)
+        res = await this.$axios.patch(`api/submission/unlike/${this.post.id}`)
       } else {
-        res = await this.$axios.patch(`/submission/like/${this.post.id}`)
+        res = await this.$axios.patch(`api/submission/like/${this.post.id}`)
       }
       this.post.likes = res.data.likes
     },
@@ -313,9 +313,9 @@ export default {
     async editItem(item){
       try{
         if(this.viewMode !== 'view'){
-          await this.$axios.patch(`/comment/update/${item.id}`, {content: item.content})
+          await this.$axios.patch(`api/comment/update/${item.id}`, {content: item.content})
         } else {
-          await this.$axios.patch(`/feedback/update/${item.id}`, {content: item.content})
+          await this.$axios.patch(`api/feedback/update/${item.id}`, {content: item.content})
         }
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
@@ -334,11 +334,11 @@ export default {
     async deleteItem(item){
       try{
         if(this.viewMode !== 'view'){
-        await this.$axios.delete(`/comment/remove/${item.id}`)
+        await this.$axios.delete(`api/comment/remove/${item.id}`)
         const index = this.post.comments.indexOf(item)
         this.post.comments.splice(index, 1)
       } else {
-        await this.$axios.delete(`/feedback/remove/${item.id}`)
+        await this.$axios.delete(`api/feedback/remove/${item.id}`)
         const index = this.post.feedbacks.indexOf(item)
         this.post.feedbacks.splice(index, 1)
       }

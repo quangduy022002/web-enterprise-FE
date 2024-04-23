@@ -79,7 +79,7 @@ export default {
     async sendCode () {
       try {
         this.form.code = Number(this.form.code)
-        await this.$axios.post('auth/check-code', this.form)
+        await this.$axios.post('api/auth/check-code', this.form)
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',

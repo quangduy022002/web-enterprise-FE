@@ -142,7 +142,7 @@ export default {
         title: 'My Account',
         to: '/account',
         icon: 'mdi-account',
-        valid: this.$auth.user.roles.name !== 5
+        valid: this.$auth.user.roles.name !== 5,
       },
       {
         title: 'Logout',
@@ -159,9 +159,9 @@ export default {
     }
   },
   async fetch () {
-    const res = await this.$axios.get('/submission/approved-submissions-list')
-    this.data = res.data
-    const resFac = await this.$axios.get('/faculty/get-all')
+    const res = await this.$axios.get('api/submission/approved-submissions-list')
+    this.posts = res.data
+    const resFac = await this.$axios.get('api/faculty/get-all')
     this.faculties = resFac.data
   },
   computed: {

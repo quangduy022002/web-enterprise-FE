@@ -61,8 +61,8 @@ export default {
     }
   },
   async fetch () {
-    const res = await this.$axios.get('/account/get-all')
-    const resFac = await this.$axios.get('/faculty/get-all')
+    const res = await this.$axios.get('api/account/get-all')
+    const resFac = await this.$axios.get('api/faculty/get-all')
     this.faculty  = resFac.data
     this.data = res.data
   },
@@ -71,7 +71,7 @@ export default {
       this.dialog = true
     },
     async deleteItem (item) {
-      await this.$axios.delete(`/account/delete/${item.id}`)
+      await this.$axios.delete(`api/account/delete/${item.id}`)
       const index = this.data.indexOf(item)
       this.data.splice(index, 1)
     }

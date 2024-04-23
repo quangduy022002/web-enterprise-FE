@@ -152,7 +152,7 @@ export default {
   methods: {
     async signUp () {
       try {
-        const res = await this.$axios.post('/account/createClient', this.form)
+        const res = await this.$axios.post('api/account/createClient', this.form)
         this.dialog = false
         this.$emit('updateUser', res)
         this.$store.commit('alerts/add', new Alert(this, {
