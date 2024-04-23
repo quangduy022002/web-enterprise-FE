@@ -30,8 +30,14 @@
         </v-card-title>
       </v-img>
       <v-layout v-if="viewMode === 'view'" justify-end align-end>
-        <div class="mr-4"><v-icon>mdi-chat</v-icon>{{`${post.feedbacks.length} Comments`}}</div>
-        <div @click="handleLike()"><v-icon :color="this.post.likes.includes(this.$auth.user.id) ? 'red' : ''">mdi-heart</v-icon>{{`${post.likes.length} Likes`}}</div>
+        <div class="mr-4">
+          <v-icon>mdi-chat</v-icon>{{ `${post.feedbacks.length} Comments` }}
+        </div>
+        <div @click="handleLike()">
+          <v-icon :color="post.likes.includes($auth.user.id) ? 'red' : ''">
+            mdi-heart
+          </v-icon>{{ `${post.likes.length} Likes` }}
+        </div>
       </v-layout>
       <v-layout class="text-caption" justify-space-between>
         <div>{{ formatDate(post.createdAt) }}</div>
@@ -54,9 +60,9 @@
         <v-divider />
         <v-form @submit.prevent="addComment()">
           <v-layout class="my-2" align-center>
-            <v-btn icon class="mr-2">
-              <v-img src="/avatar.png" width="40" height="40" />
-            </v-btn>
+            <div class="mr-2">
+              <v-img :src="$auth.user.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+            </div>
 
             <v-text-field
               v-model="form.content"
@@ -73,26 +79,28 @@
         </v-form>
         <v-divider v-if="post.comments.length" />
         <v-layout v-for="comment in post.comments" :key="comment.id" class="my-2" align-center>
-          <v-btn icon class="mr-2">
-            <v-img src="/avatar.png" width="40" height="40" />
-          </v-btn>
+          <div class="mr-2">
+              <v-img :src="comment.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+            </div>
           <v-layout column>
             <div class="font-weight-bold">
               {{ comment.author.firstName + " " + comment.author.lastName }}
             </div>
-            <v-layout  v-if="editComment.length && editComment === comment.id">
-            <v-text-field
-              v-model="comment.content"
-              outlined
-              dense
-              hide-details
-              placeholder="Write your comment here"
-            />
-            <v-btn icon class="mr-2" @click="editItem(comment)" >
-              <v-icon>mdi-send</v-icon>
-            </v-btn>
+            <v-layout v-if="editComment.length && editComment === comment.id">
+              <v-text-field
+                v-model="comment.content"
+                outlined
+                dense
+                hide-details
+                placeholder="Write your comment here"
+              />
+              <v-btn icon class="mr-2" @click="editItem(comment)">
+                <v-icon>mdi-send</v-icon>
+              </v-btn>
             </v-layout>
-            <div v-else>{{ comment.content }}</div>
+            <div v-else>
+              {{ comment.content }}
+            </div>
           </v-layout>
           <v-menu
             v-if="!editComment.length && comment.author.id === $auth.user.id"
@@ -141,9 +149,9 @@
         <v-divider />
         <v-form @submit.prevent="addFeedback()">
           <v-layout class="my-2" align-center>
-            <v-btn icon class="mr-2">
-              <v-img src="/avatar.png" width="40" height="40" />
-            </v-btn>
+            <div class="mr-2">
+              <v-img :src="$auth.user?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+            </div>
 
             <v-text-field
               v-model="form.content"
@@ -160,14 +168,14 @@
         </v-form>
         <v-divider v-if="post.feedbacks.length" />
         <v-layout v-for="feedback in post.feedbacks" :key="feedback.id" class="my-2" align-center>
-          <v-btn icon class="mr-2">
-            <v-img src="/avatar.png" width="40" height="40" />
-          </v-btn>
+          <div class="mr-2">
+              <v-img :src="feedback.author?.avatar ?? '/avatar.png'" width="40" height="40" class=" rounded-circle" />
+            </div>
           <v-layout column>
             <div class="font-weight-bold">
               {{ feedback.author.firstName + " " + feedback.author.lastName }}
             </div>
-            <v-layout  v-if="editComment.length && editComment === feedback.id">
+            <v-layout v-if="editComment.length && editComment === feedback.id">
               <v-text-field
                 v-model="feedback.content"
                 outlined
@@ -175,11 +183,13 @@
                 hide-details
                 placeholder="Write your comment here"
               />
-              <v-btn icon class="mr-2" @click="editItem(feedback)" >
+              <v-btn icon class="mr-2" @click="editItem(feedback)">
                 <v-icon>mdi-send</v-icon>
               </v-btn>
-              </v-layout>
-              <div v-else>{{ feedback.content }}</div>
+            </v-layout>
+            <div v-else>
+              {{ feedback.content }}
+            </div>
           </v-layout>
           <v-menu
             v-if="!editComment.length && feedback.author.id === $auth.user.id"
@@ -279,12 +289,12 @@ export default {
     },
     async addComment () {
       const res = await this.$axios.post('api/comment/create', this.form)
-      this.form.content = ""
+      this.form.content = ''
       this.post.comments.push(res.data)
     },
     async addFeedback () {
       const res = await this.$axios.post('api/feedback/create', this.form)
-      this.form.content = ""
+      this.form.content = ''
       this.post.feedbacks.push(res.data)
     },
     async handleLike () {
@@ -307,15 +317,15 @@ export default {
       const fileNameWithParams = file.split('?')[0]
       return fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1)
     },
-    editMode(id){
-      this.editComment =  id
+    editMode (id) {
+      this.editComment = id
     },
-    async editItem(item){
-      try{
-        if(this.viewMode !== 'view'){
-          await this.$axios.patch(`api/comment/update/${item.id}`, {content: item.content})
+    async editItem (item) {
+      try {
+        if (this.viewMode !== 'view') {
+          await this.$axios.patch(`api/comment/update/${item.id}`, { content: item.content })
         } else {
-          await this.$axios.patch(`api/feedback/update/${item.id}`, {content: item.content})
+          await this.$axios.patch(`api/feedback/update/${item.id}`, { content: item.content })
         }
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
@@ -331,23 +341,23 @@ export default {
         this.editComment = ''
       }
     },
-    async deleteItem(item){
-      try{
-        if(this.viewMode !== 'view'){
-        await this.$axios.delete(`api/comment/remove/${item.id}`)
-        const index = this.post.comments.indexOf(item)
-        this.post.comments.splice(index, 1)
-      } else {
-        await this.$axios.delete(`api/feedback/remove/${item.id}`)
-        const index = this.post.feedbacks.indexOf(item)
-        this.post.feedbacks.splice(index, 1)
-      }
-      this.$store.commit('alerts/add', new Alert(this, {
+    async deleteItem (item) {
+      try {
+        if (this.viewMode !== 'view') {
+          await this.$axios.delete(`api/comment/remove/${item.id}`)
+          const index = this.post.comments.indexOf(item)
+          this.post.comments.splice(index, 1)
+        } else {
+          await this.$axios.delete(`api/feedback/remove/${item.id}`)
+          const index = this.post.feedbacks.indexOf(item)
+          this.post.feedbacks.splice(index, 1)
+        }
+        this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',
           message: 'Successful'
         }))
-      } catch (err){
+      } catch (err) {
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'error',
           message: err?.response?.data?.message

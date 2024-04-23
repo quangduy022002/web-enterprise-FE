@@ -30,15 +30,15 @@
           hide-details
           placeholder="Filter by Year"
         >
-        <template v-slot:selection="data">
-          <!-- HTML that describe how select should render selected items -->
-          {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
-        </template>
-        <template v-slot:item="data">
-          <!-- HTML that describe how select should render items when the select is open -->
-          {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
-        </template>
-      </v-select>
+          <template #selection="data">
+            <!-- HTML that describe how select should render selected items -->
+            {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
+          </template>
+          <template #item="data">
+            <!-- HTML that describe how select should render items when the select is open -->
+            {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
+          </template>
+        </v-select>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
@@ -186,10 +186,9 @@ export default {
     })
   },
   methods: {
-    getPeriod(closureDate, finalClosureDate){
-const result = closureDate.substring(0, 7) + ' -> ' + finalClosureDate.substring(0, 7);
-return result // Output: 2024-04 -> 2025-12
-
+    getPeriod (closureDate, finalClosureDate) {
+      const result = closureDate.substring(0, 7) + ' -> ' + finalClosureDate.substring(0, 7)
+      return result // Output: 2024-04 -> 2025-12
     },
     addPeriod () {
       this.dialog = true

@@ -56,32 +56,32 @@ export default {
     }
   },
   computed: {
-    chartData(){
+    chartData () {
       let data = []
       let labels
-      if(this.$auth.user.roles.name !== 4 && this.periods.length){
-        labels = this.getMonthsBetweenDates(new Date(this.periods[0].closureDate),new Date(this.periods[0].finalClosureDate))
+      if (this.$auth.user.roles.name !== 4 && this.periods.length) {
+        labels = this.getMonthsBetweenDates(new Date(this.periods[0].closureDate), new Date(this.periods[0].finalClosureDate))
         const postCounts = this.posts.reduce((counts, post) => {
-            const month = new Date(post.createdAt).toLocaleString('en', { month: 'long' });
-            const index = labels.indexOf(month);
-            
-            if (index !== -1) {
-                counts[index]++;
-            }
+          const month = new Date(post.createdAt).toLocaleString('en', { month: 'long' })
+          const index = labels.indexOf(month)
 
-            return counts;
-        }, new Array(labels.length).fill(0));
+          if (index !== -1) {
+            counts[index]++
+          }
+
+          return counts
+        }, new Array(labels.length).fill(0))
         data = postCounts
       } else {
-        let totalLikes = 0;
-      let totalFeedBack = 0;
-      let totalComment = 0;
-      this.posts.forEach(post => {
-        totalLikes += post.likes.length
-        totalFeedBack += post.feedbacks.length
-        totalComment += post.comments.length
-      });
-      data = [totalLikes, totalFeedBack, totalComment]
+        let totalLikes = 0
+        let totalFeedBack = 0
+        let totalComment = 0
+        this.posts.forEach((post) => {
+          totalLikes += post.likes.length
+          totalFeedBack += post.feedbacks.length
+          totalComment += post.comments.length
+        })
+        data = [totalLikes, totalFeedBack, totalComment]
       }
       return {
         labels: labels ?? [
@@ -102,15 +102,15 @@ export default {
     }
   },
   methods: {
-    getMonthsBetweenDates(startDate, endDate) {
-      let months = [];
-      let currentDate = new Date(startDate);
+    getMonthsBetweenDates (startDate, endDate) {
+      const months = []
+      const currentDate = new Date(startDate)
 
       while (currentDate <= endDate) {
-          months.push(currentDate.toLocaleString('en', { month: 'long' }));
-          currentDate.setMonth(currentDate.getMonth() + 1);
+        months.push(currentDate.toLocaleString('en', { month: 'long' }))
+        currentDate.setMonth(currentDate.getMonth() + 1)
       }
-      return months;
+      return months
     }
   }
 }
