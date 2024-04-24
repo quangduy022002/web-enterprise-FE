@@ -20,14 +20,14 @@
       Post
     </div>
     <v-card>
-      <v-card-title>
+      <v-card-title class="d-flex align-center justify-lg-space-between">
         <v-select
           v-model="period"
           :items="periods"
           outlined
           single-line
-          style="max-width:230px;"
-          class="shrink"
+          style="max-width:200px;"
+          class="shrink rounded-lg"
           hide-details
           placeholder="Filter by Year"
         >
@@ -42,25 +42,63 @@
         </v-select>
         <v-text-field
           v-model="search"
+          class="rounded-lg"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           outlined
+          style="max-width:500px;"
           hide-details
         />
-        <v-btn v-if="$auth.user.roles.name === 1" color="primary" x-large class="ml-2 text-none" @click="addPeriod">
-          Add Period
-        </v-btn>
-        <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2 text-none">
-          Add a post
-        </v-btn>
+        <div class="d-flex align-center" style="gap: 5px">
+          <v-btn
+            v-if="$auth.user.roles.name <= 2"
+            color="primary"
+            :disabled="!selectedRows.length"
+            x-large
+            class="ml-2 text-none rounded-lg"
+            @click="handleDownloadAll"
+          >
+            Download
+          </v-btn>
+          <v-btn v-if="$auth.user.roles.name === 1" color="primary" x-large class="ml-2 text-none rounded-lg" @click="addPeriod">
+            Add Period
+          </v-btn>
+          <v-btn v-if="$auth.user.roles.name === 4" to="/add-post" color="primary" x-large class="ml-2 text-none rounded-lg">
+            Add a post
+          </v-btn>
+        </div>
       </v-card-title>
       <v-data-table
         :headers="headers"
         :items="filteredData"
         disable-sort
-        @click:row="handleClick"
+        item-key="_id"
+        show-select
       >
+        <template #header.data-table-select>
+          <v-checkbox
+            :on-icon="'mdi-checkbox-marked-outline'"
+            :off-icon="'mdi-checkbox-blank-outline'"
+            color="#0C1153"
+            @click="handleSelectAll"
+          />
+        </template>
+        <template #item.data-table-select="{ item }">
+          <v-checkbox
+            v-model="selectedRows"
+            :on-icon="'mdi-checkbox-marked-outline'"
+            :off-icon="'mdi-checkbox-blank-outline'"
+            color="#0C1153"
+            multiple
+            :value="item"
+          />
+        </template>
+        <template #item.id="{item}">
+          <p class="mb-0 styleHover" @click="handleClick(item)">
+            {{ item.id }}
+          </p>
+        </template>
         <template #item.status.name="{ item }">
           <v-chip
             :color="getColor(item.status.name)"
@@ -78,22 +116,6 @@
           </v-chip>
         </template>
         <template #item.actions="{ item }">
-          <!-- <v-layout>
-          <v-icon
-            v-if="item.status.name !== 'Approved' && $auth.user.roles.name === 4"
-            class="mr-2"
-            @click.stop="editItem(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
-            class="mr-2"
-            @click.stop="deleteItem(item)"
-          >
-            mdi-delete
-          </v-icon>
-          </v-layout> -->
           <v-menu
             v-if="(item.status.name !== 'Approved' && $auth.user.roles.name === 4) || $auth.user.roles.name !== 4"
             bottom
@@ -130,7 +152,7 @@
                   </v-icon>Delete Post
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item v-if="item.status.name === 'Approved' && $auth.user.roles.name !== 4" @click="publishItem(item)">
+              <v-list-item v-if="item.status.name === 'Approved' && ($auth.user.roles.name <= 2)" @click="publishItem(item)">
                 <v-list-item-title>
                   <v-icon
                     class="mr-2"
@@ -139,7 +161,7 @@
                   </v-icon>{{ !item.publish ? 'Publish Post' : 'Unpublish Post' }}
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item @click="downloadItem(item)">
+              <v-list-item v-if="$auth.user.roles.name === 1 || $auth.user.roles.name === 2" @click="downloadItem(item)">
                 <v-list-item-title>
                   <v-icon
                     class="mr-2"
@@ -182,7 +204,9 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       data: [],
-      item: undefined
+      item: undefined,
+      selectAll: false,
+      selectedRows: []
     }
   },
   computed: {
@@ -261,6 +285,50 @@ export default {
         saveAs(content, `${item.id}.zip`)
       })
     },
+    async handleDownloadAll () {
+      const zip = new JSZip()
+      const images = []
+      const variousFiles = []
+      await Promise.all(this.selectedRows.map(async (item) => {
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+        const acceptedExtensions = ['.pdf', '.doc', '.docx']
+
+        await Promise.all(item.files.map(async (file) => {
+          if (imageExtensions.some(ext => file.toLowerCase().includes(ext))) {
+            images.push(file)
+          } else if (acceptedExtensions.some(ext => file.toLowerCase().includes(ext))) {
+            variousFiles.push(file)
+          }
+        }))
+
+        if (images.length > 0) {
+          const img = zip.folder('images')
+          images.forEach((image, index) => {
+            img.file(`${this.extractFileName(image)}_${index + 1}.png`, image)
+          })
+        }
+
+        if (variousFiles.length > 0) {
+          const various = zip.folder('various_files')
+          variousFiles.forEach((file) => {
+            various.file(`${this.extractFileName(file)}`, file)
+          })
+        }
+      }))
+
+      zip.generateAsync({ type: 'blob' }).then(function (content) {
+        saveAs(content, 'selected_files.zip')
+      })
+    },
+    extractFileName (url) {
+      const segments = url.split('/')
+
+      const lastSegment = segments[segments.length - 1]
+
+      const fileName = lastSegment.split('?')[0]
+
+      return fileName
+    },
     getPeriod (closureDate, finalClosureDate) {
       const result = closureDate + ' -> ' + finalClosureDate
       return result // Output: 2024-04 -> 2025-12
@@ -310,7 +378,26 @@ export default {
     },
     handleClick (value) {
       this.$router.push(`/post/${value.id}`)
+    },
+    handleSelectAll () {
+      this.selectAll = !this.selectAll
+
+      if (this.selectAll) {
+        this.selectedRows = this.data
+      } else {
+        this.selectedRows = []
+      }
     }
   }
 }
 </script>
+<style scoped lang="scss">
+.styleHover {
+  cursor: pointer;
+  transition: all .1s;
+  &:hover {
+    font-weight: 700;
+    color: #004D85;
+  }
+}
+</style>

@@ -47,8 +47,8 @@
             :items="roles"
             item-text="description"
             return-object
-            @change="changeRole(item)"
             :disabled="item.roles.id === 1"
+            @change="changeRole(item)"
           />
           <div v-else>
             {{ item.roles.description }}

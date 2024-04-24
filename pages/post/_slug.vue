@@ -14,7 +14,7 @@
       <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name === 3 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
         Approve
       </v-btn>
-      <v-btn v-if="post?.status?.name === 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
+      <v-btn v-if="post?.status?.name === 'Approved' && ($auth.user.roles.name === 1 || $auth.user.roles.name === 2) && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
         {{ post.publish ? 'Unpublish' : 'Publish' }}
       </v-btn>
     </v-layout>
