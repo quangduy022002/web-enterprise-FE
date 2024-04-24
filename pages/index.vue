@@ -43,8 +43,9 @@
             v-for="(item, index) in items"
             :key="index"
             :to="item.to"
+            v-show="item.valid"
           >
-            <v-list-item-title v-if="item.valid">
+            <v-list-item-title>
               <v-icon class="mr-2">
                 {{ item.icon }}
               </v-icon>{{ item.title }}
@@ -143,7 +144,7 @@
         </v-col>
       </v-row>
       <v-layout justify-center class="my-4">
-        <v-btn v-if="newPosts.length >= 4" color="primary" class="text-none" depressed @click="loadMore = !loadMore">
+        <v-btn v-if="newPosts.length >= 3" color="primary" class="text-none" depressed @click="loadMore = !loadMore">
           {{ loadMore ? 'Show less' : 'Load More' }}
         </v-btn>
       </v-layout>
@@ -184,7 +185,7 @@ export default {
   computed: {
     newPosts () {
       const reversed = JSON.parse(JSON.stringify(this.posts)).reverse()
-      return this.loadMore ? reversed : reversed.slice(0, 4)
+      return this.loadMore ? reversed : reversed.slice(0, 3)
     },
     posts () {
       let posts = this.data
@@ -199,28 +200,6 @@ export default {
     const content = document.getElementById('content')
     content.style.paddingBottom = '64px'
     content.style.paddingTop = '64px'
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY
-
-      if (scrollY > 0) {
-        config.style.boxShadow = '0 0 50px 0 rgb(0 0 0 / 10%)'
-        config.style.transition = 'all 0.3s'
-        config.style.zIndex = '99'
-        config.style.position = 'sticky'
-        config.style.width = '100%'
-        config.style.height = '70px'
-        content.style.paddingBottom = '0'
-        content.style.paddingTop = '0'
-      } else {
-        config.style.transition = 'all 0.3s'
-        config.style.position = 'absolute'
-        config.style.boxShadow = 'none'
-        config.style.width = '100%'
-        config.style.height = '70px'
-        content.style.paddingBottom = '64px'
-        content.style.paddingTop = '64px'
-      }
-    })
   },
   methods: {
     truncateDescription (description) {
