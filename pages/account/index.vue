@@ -72,7 +72,6 @@
       <v-data-table
         :headers="headers"
         :items="filteredData"
-        disable-sort
         item-key="_id"
         show-select
       >
@@ -192,15 +191,16 @@ export default {
       headers: [
         {
           text: 'Student name',
-          value: 'author.fullName'
+          value: 'author.fullName',
+          sortable: false
         },
-        { text: 'Faculty', value: 'author.faculty.name' },
-        { text: 'Post Id', value: 'id' },
-        { text: 'Email', value: 'author.email' },
-        { text: 'Detail Post', value: 'name' },
-        { text: 'Post status', value: 'status.name' },
-        { text: 'Year', value: 'period.academicYear' },
-        { text: 'Publish', value: 'publish' },
+        { text: 'Faculty', value: 'author.faculty.name', sortable: true },
+        { text: 'Post Id', value: 'id', sortable: false },
+        { text: 'Email', value: 'author.email', sortable: false },
+        { text: 'Detail Post', value: 'name', sortable: false },
+        { text: 'Post status', value: 'status.name', sortable: false },
+        { text: 'Year', value: 'period.academicYear', sortable: false },
+        { text: 'Publish', value: 'publish', sortable: false },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       data: [],
@@ -293,6 +293,7 @@ export default {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
         const acceptedExtensions = ['.pdf', '.doc', '.docx']
 
+        // eslint-disable-next-line array-callback-return, require-await
         await Promise.all(item.files.map(async (file) => {
           if (imageExtensions.some(ext => file.toLowerCase().includes(ext))) {
             images.push(file)

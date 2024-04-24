@@ -8,7 +8,7 @@
         </v-icon>
       </v-btn>
       <v-spacer />
-      <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name === 3 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
+      <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name === 3 && viewMode !== 'view' && !post.publish" color="error" class="mr-2" @click="deny()">
         Deny
       </v-btn>
       <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name === 3 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
