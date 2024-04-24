@@ -42,7 +42,7 @@
         </template>
         <template #item.roles.description="{ item }">
           <v-select
-            v-if="$auth.user.roles.id = 1"
+            v-if="$auth.user.roles.id === 1"
             v-model="item.roles"
             :items="roles"
             item-text="description"

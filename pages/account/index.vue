@@ -10,7 +10,7 @@
     </div>
     <v-row justify="center" align="center">
       <v-col>
-        <PieChart :posts="data" />
+        <PieChart :posts="filteredData" />
       </v-col>
       <v-col>
         <LineChartComponent :posts="data" :periods="periods" />

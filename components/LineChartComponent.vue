@@ -60,18 +60,14 @@ export default {
       let data = []
       let labels
       if (this.$auth.user.roles.name !== 4 && this.periods.length) {
-        labels = this.getMonthsBetweenDates(new Date(this.periods[0].closureDate), new Date(this.periods[0].finalClosureDate))
-        const postCounts = this.posts.reduce((counts, post) => {
-          const month = new Date(post.createdAt).toLocaleString('en', { month: 'long' })
-          const index = labels.indexOf(month)
-
-          if (index !== -1) {
-            counts[index]++
-          }
-
-          return counts
-        }, new Array(labels.length).fill(0))
-        data = postCounts
+        labels = []
+        const periods = [...this.periods]
+        periods.sort((a, b) => parseInt(a.academicYear) - parseInt(b.academicYear))
+        periods.forEach((value) => {
+          labels.push(value.academicYear)
+          const count = this.posts.filter(post => post.period.academicYear === value.academicYear)
+          data.push(count.length)
+        })
       } else {
         let totalLikes = 0
         let totalFeedBack = 0
