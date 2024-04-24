@@ -50,8 +50,8 @@ export default {
             '#E14444',
             '#FFC107',
             '#00E676',
-            '#000000',
-            '#9E9E9E'
+            '#7C3AED',
+            '#B5B5B5'
           ],
           hoverOffset: 4
         },
@@ -61,8 +61,8 @@ export default {
             '#E14444',
             '#FFC107',
             '#00E676',
-            '#000000',
-            '#9E9E9E'
+            '#7C3AED',
+            '#B5B5B5'
           ],
           hoverOffset: 4
         }]
