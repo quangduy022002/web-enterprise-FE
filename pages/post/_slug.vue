@@ -54,7 +54,7 @@
         </a>
       </v-layout>
       <v-card-text v-html="post.description" />
-      <div v-if="viewMode !== 'view' && post.period.finalClosureDate >= currentDay && $auth.user.roles.id === 3">
+      <div v-if="viewMode !== 'view' && post.period.finalClosureDate >= currentDay && ($auth.user.roles.id === 3 || $auth.user.roles.id === 4)">
         <div class="text-h2">
           Comments
         </div>
