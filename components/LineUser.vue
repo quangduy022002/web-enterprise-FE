@@ -69,7 +69,7 @@ export default {
         labels = [
           'Student',
           'Coordinator',
-          'Marketing',
+          'Manager',
           'Admin',
           'Guest'
         ]
