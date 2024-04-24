@@ -34,19 +34,35 @@ export default {
       const denied = this.posts.filter(post => post.status.name === 'Denied')
       const notApproved = this.posts.filter(post => post.status.name === 'Not approved')
       const approved = this.posts.filter(post => post.status.name === 'Approved')
+      const published = this.posts.filter(post => post.publish)
+      const unPublish = this.posts.filter(post => !post.publish)
       return {
         labels: [
           'Denied',
           'Not Approved',
-          'Approved'
+          'Approved',
+          'Published',
+          'Draft'
         ],
         datasets: [{
-          label: 'My First Dataset',
-          data: [denied.length, notApproved.length, approved.length],
+          data: [denied.length, notApproved.length, approved.length, 0, 0],
           backgroundColor: [
             '#E14444',
             '#FFC107',
-            '#00E676'
+            '#00E676',
+            '#000000',
+            '#9E9E9E'
+          ],
+          hoverOffset: 4
+        },
+        {
+          data: [0, 0, 0, published.length, unPublish.length],
+          backgroundColor: [
+            '#E14444',
+            '#FFC107',
+            '#00E676',
+            '#000000',
+            '#9E9E9E'
           ],
           hoverOffset: 4
         }]
