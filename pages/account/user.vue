@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container>
-    <edit-user v-model="dialog" />
+    <edit-user v-model="dialog" :faculties="faculty" />
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>

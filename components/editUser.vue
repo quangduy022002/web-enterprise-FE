@@ -47,8 +47,10 @@
         <v-select
           v-if="$auth.user.roles.name !== 3"
           v-model="form.faculty"
-          :items="items"
+          :items="faculties"
           outlined
+          item-text="name"
+          item-value="name"
           class="rounded-xl"
           color="black"
           :rules="[$rules.required]"
@@ -94,6 +96,10 @@ export default {
     value: {
       type: Boolean,
       default: false
+    },
+    faculties: {
+      type: Array,
+      default: () => []
     }
   },
   data () {
