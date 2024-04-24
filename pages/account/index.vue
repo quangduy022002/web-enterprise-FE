@@ -157,8 +157,8 @@
   </v-container>
 </template>
 <script>
-import { Alert } from '~/store/alerts'
 import JSZip from 'jszip'
+import { Alert } from '~/store/alerts'
 import '~/plugins/filesave.js'
 export default {
   layout: 'account',
@@ -199,7 +199,7 @@ export default {
     })
   },
   methods: {
-    downloadItem(item){
+    downloadItem (item) {
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
       const acceptedExtensions = ['.pdf', '.doc', '.docx']
       const filesPdf = []
@@ -216,21 +216,21 @@ export default {
           }
         })
       })
-      let zip = new JSZip();
-        let img = zip.folder("images")
-        img.file("img.png", image)
-        let pdf = zip.folder("pdf")
-        if(filesPdf.length){
-          filesPdf.forEach(file => {
-            const fileNameWithParams = file.split('?')[0]
-            pdf.file(fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1),file)
-          })
-        }
-        zip.generateAsync({
-          type: "blob"
-        }).then(function(content) {
-          saveAs(content, `${item.id}.zip`)
+      const zip = new JSZip()
+      const img = zip.folder('images')
+      img.file('img.png', image)
+      const pdf = zip.folder('pdf')
+      if (filesPdf.length) {
+        filesPdf.forEach((file) => {
+          const fileNameWithParams = file.split('?')[0]
+          pdf.file(fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1), file)
         })
+      }
+      zip.generateAsync({
+        type: 'blob'
+      }).then(function (content) {
+        saveAs(content, `${item.id}.zip`)
+      })
     },
     getPeriod (closureDate, finalClosureDate) {
       const result = closureDate.substring(0, 7) + ' -> ' + finalClosureDate.substring(0, 7)

@@ -41,9 +41,9 @@
         <v-list>
           <v-list-item
             v-for="(item, index) in items"
+            v-show="item.valid"
             :key="index"
             :to="item.to"
-            v-show="item.valid"
           >
             <v-list-item-title>
               <v-icon class="mr-2">

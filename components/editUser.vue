@@ -32,7 +32,7 @@
           prepend-inner-icon="mdi-email"
           outlined
           label="Email"
-          :rules="[$rules.required, $rules.email]"
+          :rules="[$rules.required, $rules.emailTemp]"
         />
         <v-text-field
           v-model="form.username"
