@@ -15,6 +15,11 @@ export default ({ app }, inject) => {
       if (!value.endsWith('@fpt.edu.vn')) { return 'Email must belong to @fpt.edu.vn domain' }
       return true
     },
+    emailTemp: (value) => {
+      if (!value) { return true }
+      if (!EMAIL_REGEX.test(value)) { return 'Invalid Email' }
+      return true
+    },
     phone: (value) => {
       return !value || PHONE_REGEX.test(value) || 'Invalid Phone'
     },

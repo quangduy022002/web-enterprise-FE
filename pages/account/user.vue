@@ -5,10 +5,10 @@
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
-    <div v-if="this.$auth.user.roles.id === 1" class="text-h2 mb-4">
+    <div v-if="$auth.user.roles.id === 1" class="text-h2 mb-4">
       Analysis
     </div>
-    <line-user :faculty="faculty" :users="data" v-if="this.$auth.user.roles.id === 1" />
+    <line-user v-if="$auth.user.roles.id === 1" :faculty="faculty" :users="data" />
     <div class="text-h2 my-5">
       User
     </div>
@@ -34,10 +34,25 @@
       >
         <template #item.actions="{ item }">
           <v-icon
+            v-if="item.roles.id !== 1"
             @click.stop="deleteItem(item)"
           >
             mdi-delete
           </v-icon>
+        </template>
+        <template #item.roles.description="{ item }">
+          <v-select
+            v-if="$auth.user.roles.id = 1"
+            v-model="item.roles"
+            :items="roles"
+            item-text="description"
+            return-object
+            @change="changeRole(item)"
+            :disabled="item.roles.id === 1"
+          />
+          <div v-else>
+            {{ item.roles.description }}
+          </div>
         </template>
       </v-data-table>
     </v-card>
@@ -62,7 +77,8 @@ export default {
       ],
       data: [],
       item: undefined,
-      faculty: undefined
+      faculty: undefined,
+      roles: [{ name: 1, id: 1, description: 'Admin' }, { name: 2, id: 2, description: 'Marketing Manager' }, { name: 3, id: 3, description: 'Marketing Coordinator' }, { name: 4, id: 4, description: 'Student' }, { name: 5, id: 5, description: 'Guest' }]
     }
   },
   async fetch () {
@@ -78,6 +94,21 @@ export default {
   methods: {
     addUser () {
       this.dialog = true
+    },
+    async changeRole (user) {
+      try {
+        await this.$axios.patch(`api/account/update-role/${user.id}`, { roleName: user.roles.name })
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'success',
+          icon: 'check',
+          message: 'Successful'
+        }))
+      } catch (err) {
+        this.$store.commit('alerts/add', new Alert(this, {
+          type: 'error',
+          message: err?.response?.data?.message
+        }))
+      }
     },
     async deleteItem (item) {
       await this.$axios.delete(`/account/delete/${item.id}`)

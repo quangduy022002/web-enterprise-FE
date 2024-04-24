@@ -8,15 +8,15 @@
         </v-icon>
       </v-btn>
       <v-spacer />
-        <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
-          Deny
-        </v-btn>
-        <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
-          Approve
-        </v-btn>
-        <v-btn v-if="post?.status?.name === 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
-          {{ post.publish ? 'Unpublish' : 'Publish'}}
-        </v-btn>
+      <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
+        Deny
+      </v-btn>
+      <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
+        Approve
+      </v-btn>
+      <v-btn v-if="post?.status?.name === 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
+        {{ post.publish ? 'Unpublish' : 'Publish' }}
+      </v-btn>
     </v-layout>
     <v-card v-if="!loading" flat>
       <v-img

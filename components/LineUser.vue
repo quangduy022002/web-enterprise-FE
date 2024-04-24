@@ -57,7 +57,6 @@ export default {
   },
   computed: {
     chartData () {
-      console.log(this.faculty)
       let data = []
       let labels = []
       if (this.$auth.user.roles.name === 3) {
@@ -80,7 +79,6 @@ export default {
         let totalAdmin = 0
         let totalGuest = 0
         this.users.forEach((user) => {
-          console.log(user)
           if (user.roles.id === 1) { totalAdmin += 1 }
           if (user.roles.id === 2) { totalMarketing += 1 }
           if (user.roles.id === 3) { totalCoordinator += 1 }
