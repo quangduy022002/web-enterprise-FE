@@ -97,7 +97,7 @@ export default {
     },
     async changeRole (user) {
       try {
-        await this.$axios.patch(`api/account/update-role/${user.id}`, { roleName: user.roles.name })
+        await this.$axios.patch(`/account/update-role/${user.id}`, { roleName: user.roles.name })
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',

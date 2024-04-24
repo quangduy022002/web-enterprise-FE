@@ -4,29 +4,46 @@
       <v-form ref="form" v-model="valid" @submit.prevent="signUp()">
         <v-row justify="center" align="center">
           <v-col>
-            <v-text-field
-              v-model="form.closureDate"
-              class="rounded-xl mr-4"
-              color="black"
-              prepend-inner-icon="mdi-account"
-              outlined
-              label="Closure Date"
-              :rules="[$rules.required]"
-            />
-            <v-date-picker v-model="form.closureDate" :allowed-dates="allowedDates" />
+            <v-menu
+              bottom
+            >
+              <template #activator="{ on, attrs }">
+                <v-text-field
+                  v-model="form.closureDate"
+                  class="rounded-xl mr-4"
+                  color="black"
+                  prepend-inner-icon="mdi-account"
+                  outlined
+                  readonly
+                  v-bind="attrs"
+                  label="Closure Date"
+                  :rules="[$rules.required]"
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker v-model="form.closureDate" :allowed-dates="allowedDates" />
+            </v-menu>
           </v-col>
           <v-col>
-            <v-text-field
-              v-model="form.finalClosureDate"
-              class="rounded-xl mr-4"
-              color="black"
-
-              prepend-inner-icon="mdi-account"
-              outlined
-              label="Final ClosureDate"
-              :rules="[$rules.required]"
-            />
-            <v-date-picker v-model="form.finalClosureDate" :allowed-dates="allowedDates" />
+            <v-menu
+              bottom
+            >
+              <template #activator="{ on, attrs }">
+                <v-text-field
+                  v-model="form.finalClosureDate"
+                  class="rounded-xl mr-4"
+                  color="black"
+                  readonly
+                  prepend-inner-icon="mdi-account"
+                  outlined
+                  v-bind="attrs"
+                  label="Final ClosureDate"
+                  :rules="[$rules.required]"
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker v-model="form.finalClosureDate" :allowed-dates="allowedDates" />
+            </v-menu>
           </v-col>
         </v-row>
 
@@ -49,8 +66,8 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { Alert } from '~/store/alerts'
-
 export default {
   name: 'AddPeriod',
   props: {
@@ -115,13 +132,28 @@ export default {
     }
   },
   methods: {
-    allowedDates: val => parseInt(val.split('-')[2], 10) >= parseInt((new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10).split('-')[2], 10),
+    allowedDates: (val) => {
+      const selectedDate = new Date(val)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // Set hours to midnight for accurate comparison
+      return selectedDate >= today
+    },
     async signUp () {
       try {
+        const closureDate = moment(this.form.closureDate)
+        const finalClosureDate = moment(this.form.finalClosureDate)
+        const diffInDays = finalClosureDate.diff(closureDate, 'days')
+        if (diffInDays > 14) {
+          this.$store.commit('alerts/add', new Alert(this, {
+            type: 'error',
+            message: 'The closure date and final closure date must only be 14 days apart'
+          }))
+          return
+        }
         this.form.academicYear = this.form.finalClosureDate.slice(0, 4)
         const res = await this.$axios.post('/period/create', this.form)
         this.dialog = false
-        this.$emit('updatePeriod', res)
+        this.$emit('update', res)
         this.$store.commit('alerts/add', new Alert(this, {
           type: 'success',
           icon: 'check',

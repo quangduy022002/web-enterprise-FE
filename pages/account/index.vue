@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
   <v-container>
-    <add-period v-model="dialog" />
+    <add-period v-model="dialog" @update="updatePeriod" />
     <div class="text-h1 mb-8">
       {{ `Hello ${$auth.user.firstName}` }}
     </div>
@@ -57,8 +57,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="data"
-        :search="search"
+        :items="filteredData"
         disable-sort
         @click:row="handleClick"
       >
@@ -178,6 +177,7 @@ export default {
         { text: 'Email', value: 'author.email' },
         { text: 'Detail Post', value: 'name' },
         { text: 'Post status', value: 'status.name' },
+        { text: 'Year', value: 'period.academicYear' },
         { text: 'Publish', value: 'publish' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
@@ -185,10 +185,36 @@ export default {
       item: undefined
     }
   },
+  computed: {
+    filteredData () {
+      const searchTerm = this.search.toLowerCase()
+      const yearFilter = this.period ? this.period.academicYear : ''
+
+      return this.data.filter((item) => {
+        const detailPostMatch = item.name.toLowerCase().includes(searchTerm)
+        const yearMatch = item.period.academicYear.includes(yearFilter)
+
+        if (!searchTerm && !yearFilter) {
+          return true
+        }
+
+        if (searchTerm && !yearFilter) {
+          return detailPostMatch
+        }
+
+        if (!searchTerm && yearFilter) {
+          return yearMatch
+        }
+
+        return detailPostMatch && yearMatch
+      })
+    }
+  },
   async mounted () {
     const res = await this.$axios.get('/submission/submission-list')
     const resPeriod = await this.$axios.get('/period/list')
     this.data = res.data
+
     this.periods = resPeriod.data
     this.data = this.data.map((value) => {
       if (value.author) {
@@ -199,6 +225,9 @@ export default {
     })
   },
   methods: {
+    updatePeriod (item) {
+      this.periods.push(item.data)
+    },
     downloadItem (item) {
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
       const acceptedExtensions = ['.pdf', '.doc', '.docx']
@@ -233,7 +262,7 @@ export default {
       })
     },
     getPeriod (closureDate, finalClosureDate) {
-      const result = closureDate.substring(0, 7) + ' -> ' + finalClosureDate.substring(0, 7)
+      const result = closureDate + ' -> ' + finalClosureDate
       return result // Output: 2024-04 -> 2025-12
     },
     addPeriod () {

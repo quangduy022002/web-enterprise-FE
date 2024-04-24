@@ -8,10 +8,10 @@
         </v-icon>
       </v-btn>
       <v-spacer />
-      <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
+      <v-btn v-if="post?.status?.name !== 'Denied' && $auth.user.roles.name === 3 && viewMode !== 'view'" color="error" class="mr-2" @click="deny()">
         Deny
       </v-btn>
-      <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
+      <v-btn v-if="post?.status?.name !== 'Approved' && $auth.user.roles.name === 3 && viewMode !== 'view'" color="success" class="mr-2" @click="approve()">
         Approve
       </v-btn>
       <v-btn v-if="post?.status?.name === 'Approved' && $auth.user.roles.name !== 4 && viewMode !== 'view'" :color="post.publish ? '' : 'success'" @click="publish()">
@@ -54,7 +54,7 @@
         </a>
       </v-layout>
       <v-card-text v-html="post.description" />
-      <div v-if="viewMode !== 'view'">
+      <div v-if="viewMode !== 'view' && post.period.finalClosureDate >= currentDay && $auth.user.roles.id === 3">
         <div class="text-h2">
           Comments
         </div>
@@ -143,7 +143,7 @@
           </v-menu>
         </v-layout>
       </div>
-      <div v-else>
+      <div v-else-if="viewMode === 'view'">
         <div class="text-h2">
           Feedback
         </div>
@@ -236,6 +236,7 @@
   </v-container>
 </template>
 <script>
+import moment from 'moment'
 import { Alert } from '~/store/alerts'
 export default {
   data () {
@@ -248,7 +249,8 @@ export default {
       },
       image: '',
       filesPdf: [],
-      editComment: ''
+      editComment: '',
+      currentDay: moment().format('YYYY-MM-DD')
     }
   },
   async fetch () {
@@ -300,7 +302,7 @@ export default {
         message: 'Successful'
       }))
     },
-    async publish() {
+    async publish () {
       await this.$axios.patch(`/submission/publish/${this.post.id}`, {
         publish: !this.post.publish
       })
