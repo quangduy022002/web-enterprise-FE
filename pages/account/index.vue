@@ -239,33 +239,66 @@ export default {
       const acceptedExtensions = ['.pdf', '.doc', '.docx']
       const filesPdf = []
       let image = ''
+      const zip = new JSZip()
+
+      // Function to download a file and add it to the zip
+      function downloadAndAddToZip (url, fileName) {
+        return fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to download ${fileName}: ${response.statusText}`)
+            }
+            return response.blob()
+          })
+          .then((blob) => {
+            zip.file(fileName, blob)
+            console.log(`${fileName} added to zip successfully.`)
+          })
+          .catch((error) => {
+            console.error(`Error downloading ${fileName}:`, error)
+          })
+      }
+
+      // Download and add PDF files to the zip
       item.files.forEach((file) => {
         acceptedExtensions.forEach((extension) => {
           if (file.toLowerCase().includes(extension)) {
             filesPdf.push(file)
           }
         })
-        imageExtensions.forEach((extension) => {
-          if (file.toLowerCase().includes(extension)) {
-            image = file
-          }
-        })
       })
-      const zip = new JSZip()
-      const img = zip.folder('images')
-      img.file('img.png', image)
-      const pdf = zip.folder('pdf')
-      if (filesPdf.length) {
-        filesPdf.forEach((file) => {
-          const fileNameWithParams = file.split('?')[0]
-          pdf.file(fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1), file)
-        })
+
+      // Download and add image to the zip
+      imageExtensions.forEach((extension) => {
+        if (item.files.find(file => file.toLowerCase().includes(extension))) {
+          image = item.files.find(file => file.toLowerCase().includes(extension))
+        }
+      })
+
+      const promises = []
+
+      if (image) {
+        promises.push(downloadAndAddToZip(image, 'img.png'))
       }
-      zip.generateAsync({
-        type: 'blob'
-      }).then(function (content) {
-        saveAs(content, `${item.id}.zip`)
+
+      filesPdf.forEach((file) => {
+        const fileNameWithParams = file.split('?')[0]
+        const fileName = fileNameWithParams.substring(fileNameWithParams.lastIndexOf('/') + 1)
+        promises.push(downloadAndAddToZip(file, fileName))
       })
+
+      // Wait for all downloads to complete before generating the zip
+      Promise.all(promises)
+        .then(() => {
+          zip.generateAsync({ type: 'blob' })
+            .then(function (content) {
+              saveAs(content, `${item.id}.zip`)
+              console.log(`Zip file ${item.id}.zip generated successfully.`)
+            })
+            .catch((error) => {
+              console.error('Error generating zip:', error)
+            })
+        })
     },
     async handleDownloadAll () {
       const zip = new JSZip()
