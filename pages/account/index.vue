@@ -302,39 +302,57 @@ export default {
     },
     async handleDownloadAll () {
       const zip = new JSZip()
-      const images = []
-      const variousFiles = []
-      await Promise.all(this.selectedRows.map(async (item) => {
-        const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
-        const acceptedExtensions = ['.pdf', '.doc', '.docx']
+      const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+      const acceptedExtensions = ['.pdf', '.doc', '.docx']
 
-        // eslint-disable-next-line require-await
-        await Promise.all(item.files.map(async (file) => {
-          if (imageExtensions.some(ext => file.toLowerCase().includes(ext))) {
-            images.push(file)
-          } else if (acceptedExtensions.some(ext => file.toLowerCase().includes(ext))) {
-            variousFiles.push(file)
+      try {
+        await Promise.all(this.selectedRows.map(async (item) => {
+          const images = []
+          const variousFiles = []
+
+          // Download and add files to corresponding arrays
+          await Promise.all(item.files.map(async (file) => {
+            if (imageExtensions.some(ext => file.toLowerCase().includes(ext))) {
+              images.push(await this.downloadAndAddToZip(file, zip, 'images'))
+            } else if (acceptedExtensions.some(ext => file.toLowerCase().includes(ext))) {
+              variousFiles.push(await this.downloadAndAddToZip(file, zip, 'various_files'))
+            }
+          }))
+
+          // Log if images or various files were found
+          if (images.length > 0) {
+            console.log(`Images found for ${item.id}:`, images)
+          }
+          if (variousFiles.length > 0) {
+            console.log(`Various files found for ${item.id}:`, variousFiles)
           }
         }))
 
-        if (images.length > 0) {
-          const img = zip.folder('images')
-          images.forEach((image, index) => {
-            img.file(`${this.extractFileName(image)}_${index + 1}.png`, image)
-          })
-        }
-
-        if (variousFiles.length > 0) {
-          const various = zip.folder('various_files')
-          variousFiles.forEach((file) => {
-            various.file(`${this.extractFileName(file)}`, file)
-          })
-        }
-      }))
-
-      zip.generateAsync({ type: 'blob' }).then(function (content) {
+        // Generate and save the zip
+        const content = await zip.generateAsync({ type: 'blob' })
         saveAs(content, 'selected_files.zip')
-      })
+        console.log('Zip file "selected_files.zip" generated successfully.')
+      } catch (error) {
+        console.error('Error generating zip:', error)
+      }
+    },
+
+    async downloadAndAddToZip (url, zip, folderName) {
+      try {
+        const response = await fetch(url)
+        if (!response.ok) {
+          throw new Error(`Failed to download ${url}: ${response.statusText}`)
+        }
+        const blob = await response.blob()
+        const fileName = this.extractFileName(url)
+        const folder = zip.folder(folderName)
+        folder.file(fileName, blob)
+        console.log(`${fileName} added to ${folderName} successfully.`)
+        return fileName
+      } catch (error) {
+        console.error(`Error downloading ${url}:`, error)
+        return null
+      }
     },
     extractFileName (url) {
       const segments = url.split('/')
