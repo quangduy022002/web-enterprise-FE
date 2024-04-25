@@ -26,20 +26,14 @@
           :items="periods"
           outlined
           single-line
+          multiple
+          item-text="finalClosureDate"
           style="max-width:200px;"
           class="shrink rounded-lg"
           hide-details
+          return-object
           placeholder="Filter by Year"
-        >
-          <template #selection="data">
-            <!-- HTML that describe how select should render selected items -->
-            {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
-          </template>
-          <template #item="data">
-            <!-- HTML that describe how select should render items when the select is open -->
-            {{ getPeriod(data.item.closureDate, data.item.finalClosureDate) }}
-          </template>
-        </v-select>
+        />
         <v-text-field
           v-model="search"
           class="rounded-lg"
@@ -74,6 +68,7 @@
         :items="filteredData"
         item-key="_id"
         show-select
+        :search="search"
       >
         <template #header.data-table-select>
           <v-checkbox
@@ -185,7 +180,7 @@ export default {
   data () {
     return {
       periods: [],
-      period: {},
+      period: [],
       dialog: false,
       search: '',
       headers: [
@@ -211,27 +206,14 @@ export default {
   },
   computed: {
     filteredData () {
-      const searchTerm = this.search.toLowerCase()
-      const yearFilter = this.period ? this.period.academicYear : ''
-
-      return this.data.filter((item) => {
-        const detailPostMatch = item.name.toLowerCase().includes(searchTerm)
-        const yearMatch = item.period.academicYear.includes(yearFilter)
-
-        if (!searchTerm && !yearFilter) {
-          return true
-        }
-
-        if (searchTerm && !yearFilter) {
-          return detailPostMatch
-        }
-
-        if (!searchTerm && yearFilter) {
-          return yearMatch
-        }
-
-        return detailPostMatch && yearMatch
-      })
+      const filterData = this.data
+      if (this.period.length) {
+        const check = filterData.filter((data) => {
+          return this.period.some(value => value.finalClosureDate === data.period.finalClosureDate)
+        })
+        return check
+      }
+      return filterData
     }
   },
   async mounted () {
@@ -293,7 +275,7 @@ export default {
         const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
         const acceptedExtensions = ['.pdf', '.doc', '.docx']
 
-        // eslint-disable-next-line array-callback-return, require-await
+        // eslint-disable-next-line require-await
         await Promise.all(item.files.map(async (file) => {
           if (imageExtensions.some(ext => file.toLowerCase().includes(ext))) {
             images.push(file)
