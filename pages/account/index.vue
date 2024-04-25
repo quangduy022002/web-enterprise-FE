@@ -252,7 +252,6 @@ export default {
           })
           .then((blob) => {
             zip.file(fileName, blob)
-            console.log(`${fileName} added to zip successfully.`)
           })
           .catch((error) => {
             console.error(`Error downloading ${fileName}:`, error)

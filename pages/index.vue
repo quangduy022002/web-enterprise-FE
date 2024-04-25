@@ -67,6 +67,7 @@
           solo
           outlined
           dense
+          :readonly="$auth.user.roles.name > 3"
           flat
           style="max-width:200px;"
           class="white--text"
@@ -172,7 +173,7 @@ export default {
       data: [],
       loadMore: false,
       faculties: [],
-      faculty: undefined,
+      faculty: this.$auth.user.faculty.name,
       model: 0
     }
   },
@@ -196,7 +197,7 @@ export default {
     }
   },
   mounted () {
-    const config = document.getElementById('header')
+    // const config = document.getElementById('header')
     const content = document.getElementById('content')
     content.style.paddingBottom = '64px'
     content.style.paddingTop = '64px'
